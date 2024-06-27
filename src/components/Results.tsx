@@ -1,35 +1,39 @@
-import React from 'react';
+import React from 'react'
 
 // components
-import ExerciseLink from './ExerciseLink';
+import ExerciseLink from './ExerciseLink'
 
 // data
-import { beginnerList, intermediateList, advancedList } from '../data/exerciseLists';
+import {
+  beginnerList,
+  intermediateList,
+  advancedList,
+} from '../data/exerciseLists'
 
 interface Exercise {
-  name: string;
-  url: string;
-  sets?: number;
-  reps?: number;
-  hold?: number;
+  name: string
+  url: string
+  sets?: number
+  reps?: number
+  hold?: number
 }
 
 interface ResultsProps {
-  score: number;
+  score: number
 }
 
 const getWorkoutRoutine = (score: number): Exercise[] => {
   if (score <= 2) {
-    return beginnerList;
+    return beginnerList
   } else if (score <= 4) {
-    return intermediateList;
+    return intermediateList
   } else {
-    return advancedList;
+    return advancedList
   }
-};
+}
 
 const Results: React.FC<ResultsProps> = ({ score }) => {
-  const routine = getWorkoutRoutine(score);
+  const routine = getWorkoutRoutine(score)
 
   return (
     <div>
@@ -50,7 +54,7 @@ const Results: React.FC<ResultsProps> = ({ score }) => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default Results;
+export default Results
