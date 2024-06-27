@@ -10,6 +10,7 @@ interface QuestionData {
   bothSidesTogetherMessage?: string
   numberOfEachSide?: number
   numberOfEachSideMessage?: string[]
+  exerciseGroup?: string
 }
 
 interface QuizProps {
@@ -21,7 +22,8 @@ const questions: QuestionData[] = [
     question: "Dorsiflexion Mobility Test",
     desc: "Record your distance from the wall below",
     eachSide: true,
-    bothSidesTogether: true
+    bothSidesTogether: true,
+    exerciseGroup: "Ankle Mobility"
   },
   {
     question: "Wall Sit Test",
@@ -47,7 +49,7 @@ const questions: QuestionData[] = [
     numberOfEachSide: 2,
     numberOfEachSideMessage: ["Eyes Open", "Eyes Closed"]
   },
-  { question: "Calf Raise Test", desc: "Record your results below", eachSide: true }
+  { question: "Calf Raise Test", desc: "Record your results below", eachSide: true, exerciseGroup: "Calf Strength" }
 ]
 
 const Quiz: React.FC<QuizProps> = ({ onQuizComplete }) => {
@@ -93,6 +95,7 @@ const Quiz: React.FC<QuizProps> = ({ onQuizComplete }) => {
         bothSidesTogetherMessage={questions[currentQuestion].bothSidesTogetherMessage}
         numberOfEachSide={questions[currentQuestion].numberOfEachSide}
         numberOfEachSideMessage={questions[currentQuestion].numberOfEachSideMessage}
+        exerciseGroup={questions[currentQuestion].exerciseGroup}
         answer={answers[currentQuestion]}
         onAnswerChange={handleInputChange}
       />
