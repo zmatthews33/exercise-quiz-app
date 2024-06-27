@@ -1,11 +1,14 @@
-// src/components/Question.tsx
-import React from 'react'
+import React from "react"
 
 interface QuestionProps {
   question: string
   desc?: string
   eachSide?: boolean
+  eachSideMessage?: string
   bothSidesTogether?: boolean
+  bothSidesTogetherMessage?: string
+  numberOfEachSide?: number
+  numberOfEachSideMessage?: string[]
   answer: number[]
   onAnswerChange: (e: React.ChangeEvent<HTMLInputElement>, side: number) => void
 }
@@ -14,9 +17,13 @@ const Question: React.FC<QuestionProps> = ({
   question,
   desc,
   eachSide,
+  eachSideMessage,
   bothSidesTogether,
+  bothSidesTogetherMessage,
+  numberOfEachSide,
+  numberOfEachSideMessage,
   answer,
-  onAnswerChange,
+  onAnswerChange
 }) => {
   return (
     <div>
@@ -24,40 +31,54 @@ const Question: React.FC<QuestionProps> = ({
       <p>{desc}</p>
       {bothSidesTogether && (
         <div>
+          {bothSidesTogetherMessage && <h4>{bothSidesTogetherMessage}</h4>}
           <label>Together:</label>
-          <input
-            type='number'
-            value={answer[0]}
-            onChange={(e) => onAnswerChange(e, 0)}
-          />
+          <input type='number' value={answer[0]} onChange={(e) => onAnswerChange(e, 0)} />
         </div>
       )}
       {eachSide && (
         <>
-          <div>
-            <label>Right:</label>
-            <input
-              type='number'
-              value={answer[1]}
-              onChange={(e) => onAnswerChange(e, 1)}
-            />
-          </div>
-          <div>
-            <label>Left:</label>
-            <input
-              type='number'
-              value={answer[2]}
-              onChange={(e) => onAnswerChange(e, 2)}
-            />
-          </div>
+          {numberOfEachSide && numberOfEachSideMessage ? (
+            <div>
+              {numberOfEachSideMessage.map((message, index) => (
+                <div key={index}>
+                  <h4>{message}</h4>
+                  <div>
+                    <label>Right:</label>
+                    <input
+                      type='number'
+                      value={answer[index * 2 + 1]}
+                      onChange={(e) => onAnswerChange(e, index * 2 + 1)}
+                    />
+                  </div>
+                  <div>
+                    <label>Left:</label>
+                    <input
+                      type='number'
+                      value={answer[index * 2 + 2]}
+                      onChange={(e) => onAnswerChange(e, index * 2 + 2)}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div>
+                {eachSideMessage && <h4>{eachSideMessage}</h4>}
+                <label>Right:</label>
+                <input type='number' value={answer[1]} onChange={(e) => onAnswerChange(e, 1)} />
+              </div>
+              <div>
+                <label>Left:</label>
+                <input type='number' value={answer[2]} onChange={(e) => onAnswerChange(e, 2)} />
+              </div>
+            </>
+          )}
         </>
       )}
       {!eachSide && !bothSidesTogether && (
-        <input
-          type='number'
-          value={answer[0]}
-          onChange={(e) => onAnswerChange(e, 0)}
-        />
+        <input type='number' value={answer[0]} onChange={(e) => onAnswerChange(e, 0)} />
       )}
     </div>
   )

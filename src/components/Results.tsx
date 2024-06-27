@@ -1,14 +1,10 @@
-import React from 'react'
+import React from "react"
 
 // components
-import ExerciseLink from './ExerciseLink'
+import ExerciseLink from "./ExerciseLink"
 
 // data
-import {
-  beginnerList,
-  intermediateList,
-  advancedList,
-} from '../data/exerciseLists'
+import { beginnerList, intermediateList, advancedList } from "../data/exerciseLists"
 
 interface Exercise {
   name: string
