@@ -1,7 +1,7 @@
 // src/App.tsx
-import React, { useState } from 'react'
-import Quiz from './components/Quiz'
-import Results from './components/Results'
+import React, { useState } from "react"
+import Quiz from "./components/Quiz"
+import Results from "./components/Results"
 
 const App: React.FC = () => {
   const [quizComplete, setQuizComplete] = useState(false)
@@ -17,11 +17,7 @@ const App: React.FC = () => {
       <header className='App-header'>
         <h1>Fitness Quiz</h1>
       </header>
-      {quizComplete ? (
-        <Results score={score} />
-      ) : (
-        <Quiz onQuizComplete={handleQuizComplete} />
-      )}
+      {quizComplete ? <Results score={score} /> : <Quiz onQuizComplete={handleQuizComplete} />}
     </div>
   )
 }
