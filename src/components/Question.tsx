@@ -9,6 +9,7 @@ interface QuestionProps {
   bothSidesTogetherMessage?: string
   numberOfEachSide?: number
   numberOfEachSideMessage?: string[]
+  exerciseGroup?: string
   answer: number[]
   onAnswerChange: (e: React.ChangeEvent<HTMLInputElement>, side: number) => void
 }
