@@ -1,54 +1,72 @@
 import React from "react"
+import exercisePaths from "../data/exercisePaths"
 
-// components
-import ExerciseLink from "./ExerciseLink"
-
-// data
-import { beginnerList, intermediateList, advancedList } from "../data/exerciseLists"
-
-interface Exercise {
-  name: string
-  url: string
-  sets?: number
-  reps?: number
-  hold?: number
+interface ExercisePath {
+  Path: number
+  AnkleTestFail: string
+  CalfTestFail: string
+  WorkoutPerWeekNumber: number
+  Workout1: string
+  Workout2: string
 }
 
 interface ResultsProps {
-  score: number
+  ankleTestFail: string
+  calfTestFail: string
 }
 
-const getWorkoutRoutine = (score: number): Exercise[] => {
-  if (score <= 2) {
-    return beginnerList
-  } else if (score <= 4) {
-    return intermediateList
-  } else {
-    return advancedList
+const getWorkoutPath = (
+  AnkleTestFail: string,
+  CalfTestFail: string,
+  WorkoutPerWeekNumber: number
+): ExercisePath | undefined => {
+  return exercisePaths.find(
+    (p) =>
+      p.AnkleTestFail === AnkleTestFail &&
+      p.CalfTestFail === CalfTestFail &&
+      p.WorkoutPerWeekNumber === WorkoutPerWeekNumber
+  )
+}
+
+const getWorkoutsFromPath = (path: ExercisePath | undefined): string[] => {
+  const workouts: string[] = []
+
+  if (path) {
+    if (path.Workout1) {
+      workouts.push(...path.Workout1.split(",").map((exerciseName) => exerciseName.trim()))
+    }
+    // if (path.Workout2) {
+    //   workouts.push(...path.Workout2.split(",").map((exerciseName) => exerciseName.trim()))
+    // }
   }
+
+  return workouts
 }
 
-const Results: React.FC<ResultsProps> = ({ score }) => {
-  const routine = getWorkoutRoutine(score)
+const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
+  const workoutPerWeekNumber = 2 // Assuming 2 workouts per week, adjust as needed
+  const path = getWorkoutPath(ankleTestFail, calfTestFail, workoutPerWeekNumber)
+
+  if (!path) {
+    console.error("No workout path found for the given test results and workout frequency.")
+    return null // Or display an error message
+  }
+
+  const workouts = getWorkoutsFromPath(path)
 
   return (
     <div>
-      <p>Based on the results of your test...</p>
+      <p>Based on the results of your tests...</p>
       <p>Here are some exercises for you:</p>
-      <h2>Week 1</h2>
-      <ul>
-        {routine.map((exercise, index) => (
-          <li key={index}>
-            <ExerciseLink
-              name={exercise.name}
-              url={exercise.url}
-              sets={exercise.sets}
-              reps={exercise.reps}
-              hold={exercise.hold}
-            />
-          </li>
+      <p>Did you fail the ankle test? {ankleTestFail}</p>
+      <p>Did you fail the calf test? {calfTestFail}</p>
+      <p>The selected path is: {path.Path}</p>
+      {/* <h2>Week 1</h2> */}
+      {/* <ul>
+        {workouts.map((exerciseName, index) => (
+          <li key={index}>{exerciseName}</li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   )
 }
