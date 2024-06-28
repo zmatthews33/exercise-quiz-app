@@ -28,21 +28,6 @@ const getWorkoutPath = (
   )
 }
 
-const getWorkoutsFromPath = (path: ExercisePath | undefined): string[] => {
-  const workouts: string[] = []
-
-  if (path) {
-    if (path.Workout1) {
-      workouts.push(...path.Workout1.split(",").map((exerciseName) => exerciseName.trim()))
-    }
-    // if (path.Workout2) {
-    //   workouts.push(...path.Workout2.split(",").map((exerciseName) => exerciseName.trim()))
-    // }
-  }
-
-  return workouts
-}
-
 const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
   const workoutPerWeekNumber = 2 // Assuming 2 workouts per week, adjust as needed
   const path = getWorkoutPath(ankleTestFail, calfTestFail, workoutPerWeekNumber)
@@ -52,21 +37,23 @@ const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
     return null // Or display an error message
   }
 
-  const workouts = getWorkoutsFromPath(path)
+  const workouts1 = path.Workout1.split(",").map((exerciseName) => exerciseName.trim())
+  const workouts2 = path.Workout2.split(",").map((exerciseName) => exerciseName.trim())
 
   return (
     <div>
-      <p>Based on the results of your tests...</p>
-      <p>Here are some exercises for you:</p>
-      <p>Did you fail the ankle test? {ankleTestFail}</p>
-      <p>Did you fail the calf test? {calfTestFail}</p>
-      <p>The selected path is: {path.Path}</p>
-      {/* <h2>Week 1</h2> */}
-      {/* <ul>
-        {workouts.map((exerciseName, index) => (
+      <h2>Workout 1</h2>
+      <ul>
+        {workouts1.map((exerciseName, index) => (
           <li key={index}>{exerciseName}</li>
         ))}
-      </ul> */}
+      </ul>
+      <h2>Workout 2</h2>
+      <ul>
+        {workouts2.map((exerciseName, index) => (
+          <li key={index}>{exerciseName}</li>
+        ))}
+      </ul>
     </div>
   )
 }
