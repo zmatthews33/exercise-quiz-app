@@ -34,7 +34,7 @@ const Question: React.FC<QuestionProps> = ({
         <div>
           {bothSidesTogetherMessage && <h4>{bothSidesTogetherMessage}</h4>}
           <label>Together:</label>
-          <input type='number' value={answer[0]} onChange={(e) => onAnswerChange(e, 0)} />
+          <input type='text' value={answer[0] !== null ? answer[0] : ""} onChange={(e) => onAnswerChange(e, 0)} />
         </div>
       )}
       {eachSide && (
@@ -47,16 +47,16 @@ const Question: React.FC<QuestionProps> = ({
                   <div>
                     <label>Right:</label>
                     <input
-                      type='number'
-                      value={answer[index * 2 + 1]}
+                      type='text'
+                      value={answer[index * 2 + 1] !== null ? answer[index * 2 + 1] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 1)}
                     />
                   </div>
                   <div>
                     <label>Left:</label>
                     <input
-                      type='number'
-                      value={answer[index * 2 + 2]}
+                      type='text'
+                      value={answer[index * 2 + 2] !== null ? answer[index * 2 + 2] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 2)}
                     />
                   </div>
@@ -68,18 +68,33 @@ const Question: React.FC<QuestionProps> = ({
               <div>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
                 <label>Right:</label>
-                <input type='number' value={answer[1]} onChange={(e) => onAnswerChange(e, 1)} />
+                <input
+                  type='text'
+                  value={answer[1] !== null ? answer[1] : ""}
+                  onChange={(e) => onAnswerChange(e, 1)}
+                  placeholder='right'
+                />
               </div>
               <div>
                 <label>Left:</label>
-                <input type='number' value={answer[2]} onChange={(e) => onAnswerChange(e, 2)} />
+                <input
+                  type='text'
+                  value={answer[2] !== null ? answer[2] : ""}
+                  onChange={(e) => onAnswerChange(e, 2)}
+                  placeholder='left'
+                />
               </div>
             </>
           )}
         </>
       )}
       {!eachSide && !bothSidesTogether && (
-        <input type='number' value={answer[0]} onChange={(e) => onAnswerChange(e, 0)} />
+        <input
+          type='text'
+          value={answer[0] !== null ? answer[0] : ""}
+          onChange={(e) => onAnswerChange(e, 0)}
+          placeholder='together'
+        />
       )}
     </div>
   )
