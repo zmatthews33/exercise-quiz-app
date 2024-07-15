@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react"
 
+// types
+import { ClientInfo } from "./Quiz"
+
 interface ClientFormProps {
   onSubmit: (info: { name: string; email: string; workoutsPerWeek: number }) => void
   initialInfo?: ClientInfo | null
@@ -30,7 +33,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
       <label>Email:</label>
       <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
       <label>Workouts per Week:</label>
-      <select value={workoutsPerWeek} onChange={(e) => setWorkoutsPerWeek(parseInt(e.target.value))} required>
+      <select value={workoutsPerWeek} onChange={(e) => setWorkoutsPerWeek(parseInt(e.target.value, 10))} required>
         <option value={2}>2</option>
         <option value={3}>3</option>
       </select>

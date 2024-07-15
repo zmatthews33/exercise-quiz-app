@@ -3,7 +3,8 @@ import React, { useState } from "react"
 import Quiz from "./components/Quiz"
 import Results from "./components/Results"
 
-const App: React.FC = () => {
+const App: React.FC = (props) => {
+  const { ankleTestFail, calfTestFail, clientInfo, exercisePlan } = props
   const [quizComplete, setQuizComplete] = useState(false)
   const [score, setScore] = useState(0)
 
@@ -17,7 +18,16 @@ const App: React.FC = () => {
       <header className='App-header'>
         <h1>Fitness Quiz</h1>
       </header>
-      {quizComplete ? <Results score={score} /> : <Quiz onQuizComplete={handleQuizComplete} />}
+      {quizComplete ? (
+        <Results
+          ankleTestFail={ankleTestFail}
+          calfTestFail={calfTestFail}
+          clientInfo={clientInfo}
+          exercisePlan={exercisePlan}
+        />
+      ) : (
+        <Quiz onQuizComplete={handleQuizComplete} />
+      )}
     </div>
   )
 }
