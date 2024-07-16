@@ -991,7 +991,7 @@ export const masterExerciseList: ExerciseCategory = {
       Category: "Front Planks"
     }
   ],
-  "Knee Isometrics": [
+  "Knee Strength Isometrics": [
     {
       Month: 1,
       ExerciseNo: 1,
@@ -1003,7 +1003,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "https://youtube.com/shorts/x77WsAllbdw",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 2,
@@ -1016,7 +1016,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 3,
@@ -1029,7 +1029,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 4,
@@ -1042,7 +1042,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 5,
@@ -1055,7 +1055,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 6,
@@ -1068,7 +1068,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 7,
@@ -1081,7 +1081,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     },
     {
       Month: 8,
@@ -1094,7 +1094,7 @@ export const masterExerciseList: ExerciseCategory = {
       Link: "",
       Notes: "",
       isAddOn: "Yes",
-      Category: "Knee Isometrics"
+      Category: "Knee Strength Isometrics"
     }
   ]
 }

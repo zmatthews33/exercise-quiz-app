@@ -4,10 +4,42 @@ import Question from "./Question"
 import Results from "./Results"
 import ClientForm from "./ClientForm"
 
+// types
+import { masterExerciseList } from "../data/exerciseList"
+import { exercisePaths } from "../data/exercisePaths"
+
 export interface ClientInfo {
   name: string
   email: string
   workoutsPerWeek: number
+}
+
+export type Exercise = {
+  Month: number
+  ExerciseNo: number
+  Exercise: string
+  Sets: string
+  Reps: string
+  Hold: string
+  Rest: string
+  Link: string
+  Notes: string
+  isAddOn: string
+  Category: string
+}
+
+type ExerciseCategory = {
+  [key: string]: Exercise[]
+}
+
+interface ExercisePath {
+  Path: number
+  AnkleTestFail: string
+  CalfTestFail: string
+  WorkoutPerWeekNumber: number
+  Workout1: string
+  Workout2?: string
+  Workout3?: string
 }
 
 interface QuestionData {
@@ -167,7 +199,6 @@ const Quiz: React.FC = () => {
     if (secs > 9) return 3
     return null
   }
-
   const calculateResults = () => {
     // Check ankle mobility test
     const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
@@ -184,6 +215,7 @@ const Quiz: React.FC = () => {
       console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
     }
 
+    // Calculate exercise numbers
     const kneeTestIndex = questions.findIndex((q) => q.exerciseGroup === "Knee Strength")
     if (kneeTestIndex !== -1) {
       const kneeAnswers = answers[kneeTestIndex]
@@ -233,6 +265,50 @@ const Quiz: React.FC = () => {
       console.log("Balance Test Lowest Value", lowestBalanceValue)
       console.log("Balance Exercise No:", balanceExerciseNo)
     }
+
+    // Update exercise numbers based on masterExerciseList
+    const exerciseMappings: { [key: string]: number | null } = {
+      "Knee Strength": kneeExerciseNo,
+      "Gluteus Medius Strength": gluteMedExerciseNo,
+      "Hamstring Strength": hamstringExerciseNo,
+      "Gluteus Maximus Strength": gluteMaxExerciseNo,
+      Balance: balanceExerciseNo
+    }
+
+    Object.keys(exerciseMappings).forEach((group) => {
+      if (exerciseMappings[group] !== null) {
+        const exerciseNo = exerciseMappings[group]
+        const exercises = masterExerciseList[group as keyof typeof masterExerciseList]
+
+        // Find the exercise details based on ExerciseNo
+        const exerciseDetails = exercises.find((ex) => ex.ExerciseNo === exerciseNo)
+
+        switch (group) {
+          case "Knee Strength":
+            setKneeExerciseNo(exerciseNo)
+            break
+          case "Gluteus Medius Strength":
+            setGluteMedExerciseNo(exerciseNo)
+            break
+          case "Hamstring Strength":
+            setHamstringExerciseNo(exerciseNo)
+            break
+          case "Gluteus Maximus Strength":
+            setGluteMaxExerciseNo(exerciseNo)
+            break
+          case "Balance":
+            setBalanceExerciseNo(exerciseNo)
+            break
+          default:
+            break
+        }
+
+        if (exerciseDetails) {
+          console.log(`${group} Exercise Name:`, exerciseDetails.Exercise)
+          console.log(`${group} Exercise Details:`, exerciseDetails)
+        }
+      }
+    })
   }
 
   const handleClientInfoSubmit = (info: ClientInfo) => {
@@ -284,10 +360,11 @@ const Quiz: React.FC = () => {
           ankleTestFail={ankleTestFail}
           calfTestFail={calfTestFail}
           clientInfo={clientInfo}
-          // kneeExerciseNo={kneeExerciseNo}
-          // gluteMedExerciseNo={gluteMedExerciseNo}
-          // gluteMaxExerciseNo={gluteMaxExerciseNo}
-          // hamstringExerciseNo={hamstringExerciseNo}
+          kneeExerciseNo={kneeExerciseNo}
+          gluteMedExerciseNo={gluteMedExerciseNo}
+          gluteMaxExerciseNo={gluteMaxExerciseNo}
+          hamstringExerciseNo={hamstringExerciseNo}
+          balanceExerciseNo={balanceExerciseNo}
         />
       )}
       {editMode && <button onClick={handleCancelEdit}>Cancel</button>}
