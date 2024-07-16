@@ -1,10 +1,20 @@
-export const exercisePaths = [
+export interface ExercisePath {
+  Path: number
+  AnkleTestFail: string
+  CalfTestFail: string
+  WorkoutPerWeekNumber: number
+  Workout1: string
+  Workout2?: string
+  Workout3?: string
+}
+
+export const exercisePaths: ExercisePath[] = [
   {
     Path: 1,
     AnkleTestFail: "YES",
     CalfTestFail: "YES",
     WorkoutPerWeekNumber: 2,
-    Workout1: "Calf Strength, Knee Strength, Gluteus Medius Strength, Foot strength",
+    Workout1: "Calf Strength, Knee Strength, Gluteus Medius Strength, Foot Strength",
     Workout2: "Hamstring Strength, Gluteus Maximus Strength, Balance, Ankle Mobility"
   },
   {
@@ -21,7 +31,7 @@ export const exercisePaths = [
     CalfTestFail: "YES",
     WorkoutPerWeekNumber: 2,
     Workout1: "Calf Strength, Knee Strength, Gluteus Medius Strength, Hamstring Strength",
-    Workout2: "Gluteus Maximus Strength, Balance, Knee Strength isometrics, Foot Strength"
+    Workout2: "Gluteus Maximus Strength, Balance, Knee Strength Isometrics, Foot Strength"
   },
   {
     Path: 4,
@@ -29,7 +39,7 @@ export const exercisePaths = [
     CalfTestFail: "NO",
     WorkoutPerWeekNumber: 2,
     Workout1: "Knee Strength, Gluteus Medius Strength, Hamstring Strength, Foot Strength",
-    Workout2: "Gluteus Maximus Strength, Balance, Knee Strength isometrics, Foot Strength"
+    Workout2: "Gluteus Maximus Strength, Balance, Knee Strength Isometrics, Foot Strength"
   },
   {
     Path: 5,

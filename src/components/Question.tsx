@@ -48,6 +48,7 @@ const Question: React.FC<QuestionProps> = ({
                     <label>Right:</label>
                     <input
                       type='text'
+                      required
                       value={answer[index * 2 + 1] !== null ? answer[index * 2 + 1] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 1)}
                     />
@@ -56,6 +57,7 @@ const Question: React.FC<QuestionProps> = ({
                     <label>Left:</label>
                     <input
                       type='text'
+                      required
                       value={answer[index * 2 + 2] !== null ? answer[index * 2 + 2] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 2)}
                     />
@@ -70,18 +72,18 @@ const Question: React.FC<QuestionProps> = ({
                 <label>Right:</label>
                 <input
                   type='text'
+                  required
                   value={answer[1] !== null ? answer[1] : ""}
                   onChange={(e) => onAnswerChange(e, 1)}
-                  placeholder='right'
                 />
               </div>
               <div>
                 <label>Left:</label>
                 <input
                   type='text'
+                  required
                   value={answer[2] !== null ? answer[2] : ""}
                   onChange={(e) => onAnswerChange(e, 2)}
-                  placeholder='left'
                 />
               </div>
             </>
@@ -91,9 +93,9 @@ const Question: React.FC<QuestionProps> = ({
       {!eachSide && !bothSidesTogether && (
         <input
           type='text'
+          required
           value={answer[0] !== null ? answer[0] : ""}
           onChange={(e) => onAnswerChange(e, 0)}
-          placeholder='together'
         />
       )}
     </div>

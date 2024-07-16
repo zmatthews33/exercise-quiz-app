@@ -1,58 +1,103 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { masterExerciseList } from "../data/exerciseList"
+import { Exercise } from "../components/Quiz"
 import exercisePaths from "../data/exercisePaths"
-
-interface ExercisePath {
-  Path: number
-  AnkleTestFail: string
-  CalfTestFail: string
-  WorkoutPerWeekNumber: number
-  Workout1: string
-  Workout2: string
-}
+import { ClientInfo } from "./ClientForm"
 
 interface ResultsProps {
   ankleTestFail: string
   calfTestFail: string
+  clientInfo: ClientInfo
+  kneeExerciseNo: number | null
+  gluteMedExerciseNo: number | null
+  hamstringExerciseNo: number | null
+  gluteMaxExerciseNo: number | null
+  balanceExerciseNo: number | null
 }
 
-const getWorkoutPath = (
-  AnkleTestFail: string,
-  CalfTestFail: string,
-  WorkoutPerWeekNumber: number
-): ExercisePath | undefined => {
-  return exercisePaths.find(
+const Results: React.FC<ResultsProps> = ({
+  ankleTestFail,
+  calfTestFail,
+  clientInfo,
+  kneeExerciseNo,
+  gluteMedExerciseNo,
+  hamstringExerciseNo,
+  gluteMaxExerciseNo,
+  balanceExerciseNo
+}) => {
+  const workoutPerWeekNumber = clientInfo.workoutsPerWeek
+
+  const path = exercisePaths.find(
     (p) =>
-      p.AnkleTestFail === AnkleTestFail &&
-      p.CalfTestFail === CalfTestFail &&
-      p.WorkoutPerWeekNumber === WorkoutPerWeekNumber
+      p.AnkleTestFail === ankleTestFail &&
+      p.CalfTestFail === calfTestFail &&
+      p.WorkoutPerWeekNumber === workoutPerWeekNumber
   )
-}
 
-const getWorkoutsFromPath = (path: ExercisePath | undefined): string[] => {
-  const workouts: string[] = []
+  const [week1Exercises, setWeek1Exercises] = useState<Exercise[]>([])
+  const [week2Exercises, setWeek2Exercises] = useState<Exercise[]>([])
+  const [week3Exercises, setWeek3Exercises] = useState<Exercise[]>([])
 
-  if (path) {
-    if (path.Workout1) {
-      workouts.push(...path.Workout1.split(",").map((exerciseName) => exerciseName.trim()))
+  useEffect(() => {
+    if (path) {
+      const categoriesWeek1 = path.Workout1.split(",").map((category) => category.trim())
+      const categoriesWeek2 = path.Workout2 ? path.Workout2.split(",").map((category) => category.trim()) : []
+      const categoriesWeek3 = path.Workout3 ? path.Workout3.split(",").map((category) => category.trim()) : []
+
+      const filterExercises = (categories: string[], exerciseNumbers: { [key: string]: number | null }): Exercise[] => {
+        const filteredExercises: Exercise[] = []
+        categories.forEach((category) => {
+          if (category in masterExerciseList) {
+            const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
+            if (category === "Foot Strength") {
+              const footStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (footStrengthExercise) {
+                filteredExercises.push(footStrengthExercise)
+              }
+            } else if (category === "Knee Strength Isometrics") {
+              const kneeStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (kneeStrengthExercise) {
+                filteredExercises.push(kneeStrengthExercise)
+              }
+            } else {
+              const exerciseNo = exerciseNumbers[category]
+              if (exerciseNo !== null) {
+                const exercise = exercises.find((ex) => ex.ExerciseNo === exerciseNo)
+                if (exercise) {
+                  filteredExercises.push(exercise)
+                }
+              } else {
+                exercises.forEach((ex) => filteredExercises.push(ex))
+              }
+            }
+          }
+        })
+        return filteredExercises
+      }
+
+      const exerciseNumbers = {
+        "Calf Strength": kneeExerciseNo,
+        "Knee Strength": kneeExerciseNo,
+        "Gluteus Medius Strength": gluteMedExerciseNo,
+        "Hamstring Strength": hamstringExerciseNo,
+        "Gluteus Maximus Strength": gluteMaxExerciseNo,
+        Balance: balanceExerciseNo
+      }
+
+      const week1ExercisesFiltered = filterExercises(categoriesWeek1, exerciseNumbers)
+      const week2ExercisesFiltered = filterExercises(categoriesWeek2, exerciseNumbers)
+      const week3ExercisesFiltered = filterExercises(categoriesWeek3, exerciseNumbers)
+
+      setWeek1Exercises(week1ExercisesFiltered)
+      setWeek2Exercises(week2ExercisesFiltered)
+      setWeek3Exercises(week3ExercisesFiltered)
     }
-    // if (path.Workout2) {
-    //   workouts.push(...path.Workout2.split(",").map((exerciseName) => exerciseName.trim()))
-    // }
-  }
-
-  return workouts
-}
-
-const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
-  const workoutPerWeekNumber = 2 // Assuming 2 workouts per week, adjust as needed
-  const path = getWorkoutPath(ankleTestFail, calfTestFail, workoutPerWeekNumber)
+  }, [path, kneeExerciseNo, gluteMedExerciseNo, hamstringExerciseNo, gluteMaxExerciseNo, balanceExerciseNo])
 
   if (!path) {
     console.error("No workout path found for the given test results and workout frequency.")
-    return null // Or display an error message
+    return null
   }
-
-  const workouts = getWorkoutsFromPath(path)
 
   return (
     <div>
@@ -61,12 +106,59 @@ const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
       <p>Did you fail the ankle test? {ankleTestFail}</p>
       <p>Did you fail the calf test? {calfTestFail}</p>
       <p>The selected path is: {path.Path}</p>
-      {/* <h2>Week 1</h2> */}
-      {/* <ul>
-        {workouts.map((exerciseName, index) => (
-          <li key={index}>{exerciseName}</li>
+
+      <h2>Week 1</h2>
+      <p>{path.Workout1}</p>
+      <ul>
+        {week1Exercises.map((exercise, index) => (
+          <li key={index}>
+            <strong>
+              <p>
+                Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
+              </p>
+            </strong>
+            {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
+            {exercise.Rest}, Notes: {exercise.Notes}
+          </li>
         ))}
-      </ul> */}
+      </ul>
+
+      <h2>Week 2</h2>
+      <p>{path.Workout2}</p>
+      <ul>
+        {week2Exercises.map((exercise, index) => (
+          <li key={index}>
+            <strong>
+              <p>
+                Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
+              </p>
+            </strong>
+            {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
+            {exercise.Rest}, Notes: {exercise.Notes}
+            <a href={exercise.Link}>Link</a>
+          </li>
+        ))}
+      </ul>
+
+      {week3Exercises.length > 0 && (
+        <>
+          <h2>Week 3</h2>
+          <p>{path.Workout3}</p>
+          <ul>
+            {week3Exercises.map((exercise, index) => (
+              <li key={index}>
+                <strong>
+                  <p>
+                    Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
+                  </p>
+                </strong>
+                {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
+                {exercise.Rest}, Notes: {exercise.Notes}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   )
 }
