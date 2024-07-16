@@ -98,9 +98,16 @@ const Quiz: React.FC = () => {
   const [editMode, setEditMode] = useState(false) // State for edit mode
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = parseInt(e.target.value, 10) ?? 0 // Parse input value to number, default to 0 if NaN
+    const value = parseInt(e.target.value, 10) || 0 // Parse input value to number, default to 0 if NaN
     const newAnswers = [...answers]
-    newAnswers[currentQuestion][index] = value
+
+    // Check if the value is not a number or is negative, reset to 0
+    if (isNaN(value) || value < 0) {
+      newAnswers[currentQuestion][index] = 0
+    } else {
+      newAnswers[currentQuestion][index] = value
+    }
+
     setAnswers(newAnswers)
   }
 
@@ -111,6 +118,12 @@ const Quiz: React.FC = () => {
       // Calculate results
       calculateResults()
       setShowResults(true)
+    }
+  }
+
+  const handleBackClick = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1)
     }
   }
 
@@ -261,6 +274,9 @@ const Quiz: React.FC = () => {
             answer={answers[currentQuestion]}
             onAnswerChange={handleAnswerChange}
           />
+
+          {currentQuestion > 0 && <button onClick={handleBackClick}>Back</button>}
+
           <button onClick={handleNextClick}>{currentQuestion < questions.length - 1 ? "Next" : "Finish"}</button>
         </>
       ) : (

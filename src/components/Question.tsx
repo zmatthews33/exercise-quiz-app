@@ -48,6 +48,7 @@ const Question: React.FC<QuestionProps> = ({
                     <label>Right:</label>
                     <input
                       type='text'
+                      required
                       value={answer[index * 2 + 1] !== null ? answer[index * 2 + 1] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 1)}
                     />
@@ -56,6 +57,7 @@ const Question: React.FC<QuestionProps> = ({
                     <label>Left:</label>
                     <input
                       type='text'
+                      required
                       value={answer[index * 2 + 2] !== null ? answer[index * 2 + 2] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 2)}
                     />
@@ -68,18 +70,33 @@ const Question: React.FC<QuestionProps> = ({
               <div>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
                 <label>Right:</label>
-                <input type='text' value={answer[1] !== null ? answer[1] : ""} onChange={(e) => onAnswerChange(e, 1)} />
+                <input
+                  type='text'
+                  required
+                  value={answer[1] !== null ? answer[1] : ""}
+                  onChange={(e) => onAnswerChange(e, 1)}
+                />
               </div>
               <div>
                 <label>Left:</label>
-                <input type='text' value={answer[2] !== null ? answer[2] : ""} onChange={(e) => onAnswerChange(e, 2)} />
+                <input
+                  type='text'
+                  required
+                  value={answer[2] !== null ? answer[2] : ""}
+                  onChange={(e) => onAnswerChange(e, 2)}
+                />
               </div>
             </>
           )}
         </>
       )}
       {!eachSide && !bothSidesTogether && (
-        <input type='text' value={answer[0] !== null ? answer[0] : ""} onChange={(e) => onAnswerChange(e, 0)} />
+        <input
+          type='text'
+          required
+          value={answer[0] !== null ? answer[0] : ""}
+          onChange={(e) => onAnswerChange(e, 0)}
+        />
       )}
     </div>
   )
