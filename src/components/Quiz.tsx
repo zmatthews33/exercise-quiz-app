@@ -4,13 +4,12 @@ import Question from "./Question"
 import Results from "./Results"
 import ClientForm from "./ClientForm"
 
-// import exercisePaths from "../data/exercisePaths"
-
 export interface ClientInfo {
   name: string
   email: string
   workoutsPerWeek: number
 }
+
 interface QuestionData {
   question: string
   desc?: string
@@ -46,6 +45,13 @@ const questions: QuestionData[] = [
     numberOfEachSideMessage: ["Version 1", "Version 2"],
     exerciseGroup: "Gluteus Medius Strength"
   },
+  { question: "Hamstring Bridge Test", desc: "Record reps below", eachSide: true, exerciseGroup: "Hamstring Strength" },
+  {
+    question: "Single Leg Bridge Test",
+    desc: "Record reps below",
+    eachSide: true,
+    exerciseGroup: "Gluteus Maximus Strength"
+  },
   {
     question: "Calf Raise Test",
     desc: "Record your results below",
@@ -60,11 +66,11 @@ const questions: QuestionData[] = [
 const initializeAnswers = (questions: QuestionData[]) => {
   return questions.map((q) => {
     if (q.eachSide && q.numberOfEachSide) {
-      return Array(q.numberOfEachSide * 2 + 1).fill(null)
+      return Array(q.numberOfEachSide * 2 + 1).fill(null) // Initialize with null
     } else if (q.eachSide) {
-      return [null, null, null]
+      return [null, null, null] // Initialize with null
     } else {
-      return [null]
+      return [null] // Initialize with null
     }
   })
 }
@@ -76,17 +82,17 @@ const Quiz: React.FC = () => {
   const [ankleTestFail, setAnkleTestFail] = useState("NO")
   const [calfTestFail, setCalfTestFail] = useState("NO")
   const [kneeExerciseNo, setKneeExerciseNo] = useState<number | null>(null)
-  const [gluteExerciseNo, setGluteExerciseNo] = useState<number | null>(null)
+  const [gluteMedExerciseNo, setGluteMedExerciseNo] = useState<number | null>(null)
+  const [hamstringExerciseNo, setHamstringExerciseNo] = useState<number | null>(null)
+  const [gluteMaxExerciseNo, setGluteMaxExerciseNo] = useState<number | null>(null)
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null) // State for client information
   const [editMode, setEditMode] = useState(false) // State for edit mode
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = parseInt(e.target.value, 10) // Parse input value to number
-    if (!isNaN(value)) {
-      const newAnswers = [...answers]
-      newAnswers[currentQuestion][index] = value
-      setAnswers(newAnswers)
-    }
+    const value = parseInt(e.target.value, 10) ?? 0 // Parse input value to number, default to 0 if NaN
+    const newAnswers = [...answers]
+    newAnswers[currentQuestion][index] = value
+    setAnswers(newAnswers)
   }
 
   const handleNextClick = () => {
@@ -117,6 +123,22 @@ const Quiz: React.FC = () => {
     return null
   }
 
+  const getHamstringStrengthExerciseNo = (reps: number) => {
+    if (reps >= 0 && reps < 5) return 1
+    if (reps >= 5 && reps < 10) return 2
+    if (reps >= 10 && reps < 15) return 3
+    if (reps >= 15) return 4
+    return null
+  }
+
+  const getGluteusMaximusStrengthExerciseNo = (reps: number) => {
+    if (reps >= 0 && reps < 10) return 1
+    if (reps >= 10 && reps < 20) return 2
+    if (reps >= 20 && reps < 30) return 3
+    if (reps >= 30) return 4
+    return null
+  }
+
   const calculateResults = () => {
     // Check ankle mobility test
     const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
@@ -125,12 +147,14 @@ const Quiz: React.FC = () => {
       setAnkleTestFail(ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
       console.log("Did ankle test fail?", ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
     }
+
     const calfTestIndex = questions.findIndex((q) => q.exerciseGroup === "Calf Strength")
     if (calfTestIndex !== -1) {
       const [calfTogether, calfRight, calfLeft] = answers[calfTestIndex]
       setCalfTestFail(calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
       console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
     }
+
     const kneeTestIndex = questions.findIndex((q) => q.exerciseGroup === "Knee Strength")
     if (kneeTestIndex !== -1) {
       const kneeAnswers = answers[kneeTestIndex]
@@ -140,14 +164,35 @@ const Quiz: React.FC = () => {
       console.log("Knee Exercise Lowest Value", lowestKneeValue)
       console.log("Knee Exercise No:", kneeExerciseNo)
     }
-    const gluteTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Medius Strength")
-    if (gluteTestIndex !== -1) {
-      const gluteAnswers = answers[gluteTestIndex]
-      const lowestGluteValue = Math.min(...gluteAnswers)
-      const gluteExerciseNo = getGluteusMediusStrengthExerciseNo(lowestGluteValue)
-      setGluteExerciseNo(gluteExerciseNo)
-      console.log("Gluteus Medius Strength Lowest Value", lowestGluteValue)
-      console.log("Gluteus Medius Exercise No:", gluteExerciseNo)
+
+    const gluteMedTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Medius Strength")
+    if (gluteMedTestIndex !== -1) {
+      const gluteMedAnswers = answers[gluteMedTestIndex].filter((val) => val !== null)
+      const lowestGluteMedValue = Math.min(...gluteMedAnswers)
+      const gluteMedExerciseNo = getGluteusMediusStrengthExerciseNo(lowestGluteMedValue)
+      setGluteMedExerciseNo(gluteMedExerciseNo)
+      console.log("Gluteus Medius Strength Lowest Value", lowestGluteMedValue)
+      console.log("Gluteus Medius Exercise No:", gluteMedExerciseNo)
+    }
+
+    const hamstringTestIndex = questions.findIndex((q) => q.exerciseGroup === "Hamstring Strength")
+    if (hamstringTestIndex !== -1) {
+      const hamstringAnswers = answers[hamstringTestIndex].filter((val) => val !== null)
+      const lowestHamstringValue = Math.min(...hamstringAnswers)
+      const hamstringExerciseNo = getHamstringStrengthExerciseNo(lowestHamstringValue)
+      setHamstringExerciseNo(hamstringExerciseNo)
+      console.log("Hamstring Strength Lowest Value", lowestHamstringValue)
+      console.log("Hamstring Exercise No:", hamstringExerciseNo)
+    }
+
+    const gluteMaxTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Maximus Strength")
+    if (gluteMaxTestIndex !== -1) {
+      const gluteMaxAnswers = answers[gluteMaxTestIndex].filter((val) => val !== null)
+      const lowestGluteMaxValue = Math.min(...gluteMaxAnswers)
+      const gluteMaxExerciseNo = getGluteusMaximusStrengthExerciseNo(lowestGluteMaxValue)
+      setGluteMaxExerciseNo(gluteMaxExerciseNo)
+      console.log("Gluteus Maximus Strength Lowest Value", lowestGluteMaxValue)
+      console.log("Gluteus Maximus Exercise No:", gluteMaxExerciseNo)
     }
   }
 
@@ -198,6 +243,9 @@ const Quiz: React.FC = () => {
           calfTestFail={calfTestFail}
           clientInfo={clientInfo}
           // kneeExerciseNo={kneeExerciseNo}
+          // gluteMedExerciseNo={gluteMedExerciseNo}
+          // gluteMaxExerciseNo={gluteMaxExerciseNo}
+          // hamstringExerciseNo={hamstringExerciseNo}
         />
       )}
       {editMode && <button onClick={handleCancelEdit}>Cancel</button>}

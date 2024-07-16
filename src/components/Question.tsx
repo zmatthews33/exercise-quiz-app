@@ -68,33 +68,18 @@ const Question: React.FC<QuestionProps> = ({
               <div>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
                 <label>Right:</label>
-                <input
-                  type='text'
-                  value={answer[1] !== null ? answer[1] : ""}
-                  onChange={(e) => onAnswerChange(e, 1)}
-                  placeholder='right'
-                />
+                <input type='text' value={answer[1] !== null ? answer[1] : ""} onChange={(e) => onAnswerChange(e, 1)} />
               </div>
               <div>
                 <label>Left:</label>
-                <input
-                  type='text'
-                  value={answer[2] !== null ? answer[2] : ""}
-                  onChange={(e) => onAnswerChange(e, 2)}
-                  placeholder='left'
-                />
+                <input type='text' value={answer[2] !== null ? answer[2] : ""} onChange={(e) => onAnswerChange(e, 2)} />
               </div>
             </>
           )}
         </>
       )}
       {!eachSide && !bothSidesTogether && (
-        <input
-          type='text'
-          value={answer[0] !== null ? answer[0] : ""}
-          onChange={(e) => onAnswerChange(e, 0)}
-          placeholder='together'
-        />
+        <input type='text' value={answer[0] !== null ? answer[0] : ""} onChange={(e) => onAnswerChange(e, 0)} />
       )}
     </div>
   )
