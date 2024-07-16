@@ -1,18 +1,23 @@
 import React from "react"
 import exercisePaths from "../data/exercisePaths"
 
+// types
+import { ClientInfo } from "./ClientForm"
+
 interface ExercisePath {
   Path: number
   AnkleTestFail: string
   CalfTestFail: string
   WorkoutPerWeekNumber: number
   Workout1: string
-  Workout2: string
+  Workout2?: string
+  Workout3?: string
 }
 
 interface ResultsProps {
   ankleTestFail: string
   calfTestFail: string
+  clientInfo: ClientInfo
 }
 
 const getWorkoutPath = (
@@ -28,16 +33,19 @@ const getWorkoutPath = (
   )
 }
 
-const getWorkoutsFromPath = (path: ExercisePath | undefined): string[] => {
-  const workouts: string[] = []
+const getWorkoutsFromPath = (path: ExercisePath | undefined): string[][] => {
+  const workouts: string[][] = []
 
   if (path) {
     if (path.Workout1) {
-      workouts.push(...path.Workout1.split(",").map((exerciseName) => exerciseName.trim()))
+      workouts.push(path.Workout1.split(",").map((exerciseName) => exerciseName.trim()))
     }
-    // if (path.Workout2) {
-    //   workouts.push(...path.Workout2.split(",").map((exerciseName) => exerciseName.trim()))
-    // }
+    if (path.Workout2) {
+      workouts.push(path.Workout2.split(",").map((exerciseName) => exerciseName.trim()))
+    }
+    if (path.Workout3) {
+      workouts.push(path.Workout3.split(",").map((exerciseName) => exerciseName.trim()))
+    }
   }
 
   return workouts
@@ -61,12 +69,18 @@ const Results: React.FC<ResultsProps> = ({ ankleTestFail, calfTestFail }) => {
       <p>Did you fail the ankle test? {ankleTestFail}</p>
       <p>Did you fail the calf test? {calfTestFail}</p>
       <p>The selected path is: {path.Path}</p>
-      {/* <h2>Week 1</h2> */}
-      {/* <ul>
+      <h2>Week 1</h2>
+      <ul>
         {workouts.map((exerciseName, index) => (
           <li key={index}>{exerciseName}</li>
         ))}
-      </ul> */}
+      </ul>
+      <h2>Week 2</h2>
+      <ul>
+        {workouts.map((exerciseName, index) => (
+          <li key={index}>{exerciseName}</li>
+        ))}
+      </ul>
     </div>
   )
 }

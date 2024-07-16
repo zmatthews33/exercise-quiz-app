@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react"
 
+export interface ClientInfo {
+  name: string
+  email: string
+  workoutsPerWeek: number
+}
 interface ClientFormProps {
   onSubmit: (info: { name: string; email: string; workoutsPerWeek: number }) => void
   initialInfo?: ClientInfo | null

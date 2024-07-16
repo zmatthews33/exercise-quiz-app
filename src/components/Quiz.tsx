@@ -30,7 +30,31 @@ const questions: QuestionData[] = [
     eachSide: true,
     exerciseGroup: "Ankle Mobility"
   },
-  { question: "Calf Raise Test", desc: "Record your results below", eachSide: true, exerciseGroup: "Calf Strength" }
+  {
+    question: "Wall Sit Test",
+    desc: "Record the number of seconds you held each test below",
+    eachSide: true,
+    eachSideMessage: "Single Leg Wall Sit",
+    bothSidesTogether: true,
+    bothSidesTogetherMessage: "Double Leg Wall Sit",
+    exerciseGroup: "Knee Strength"
+  },
+  {
+    question: "Side Plank Test",
+    eachSide: true,
+    numberOfEachSide: 2,
+    numberOfEachSideMessage: ["Version 1", "Version 2"],
+    exerciseGroup: "Gluteus Medius Strength"
+  },
+  {
+    question: "Calf Raise Test",
+    desc: "Record your results below",
+    eachSide: true,
+    eachSideMessage: "Each Leg",
+    bothSidesTogether: true,
+    bothSidesTogetherMessage: "Together",
+    exerciseGroup: "Calf Strength"
+  }
 ]
 
 const initializeAnswers = (questions: QuestionData[]) => {
@@ -51,6 +75,8 @@ const Quiz: React.FC = () => {
   const [showResults, setShowResults] = useState(false)
   const [ankleTestFail, setAnkleTestFail] = useState("NO")
   const [calfTestFail, setCalfTestFail] = useState("NO")
+  const [kneeExerciseNo, setKneeExerciseNo] = useState<number | null>(null)
+  const [gluteExerciseNo, setGluteExerciseNo] = useState<number | null>(null)
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null) // State for client information
   const [editMode, setEditMode] = useState(false) // State for edit mode
 
@@ -73,23 +99,58 @@ const Quiz: React.FC = () => {
     }
   }
 
+  const getKneeStrengthExerciseNo = (lowestValue: number) => {
+    if (lowestValue >= 0 && lowestValue <= 15) return 1
+    if (lowestValue >= 16 && lowestValue <= 30) return 2
+    if (lowestValue > 30 && lowestValue <= 60) return 3
+    if (lowestValue > 60 && lowestValue <= 90) return 4
+    if (lowestValue > 90) return 5
+    return null
+  }
+
+  const getGluteusMediusStrengthExerciseNo = (lowestValue: number) => {
+    if (lowestValue >= 0 && lowestValue <= 15) return 1
+    if (lowestValue >= 16 && lowestValue <= 30) return 2
+    if (lowestValue > 30 && lowestValue <= 60) return 3
+    if (lowestValue > 60 && lowestValue <= 90) return 4
+    if (lowestValue > 90) return 5
+    return null
+  }
+
   const calculateResults = () => {
     // Check ankle mobility test
     const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
-
     if (ankleTestIndex !== -1) {
       const [_, ankleRight, ankleLeft] = answers[ankleTestIndex]
       setAnkleTestFail(ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
       console.log("Did ankle test fail?", ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
     }
     const calfTestIndex = questions.findIndex((q) => q.exerciseGroup === "Calf Strength")
-
     if (calfTestIndex !== -1) {
-      const [_, calfRight, calfLeft] = answers[calfTestIndex]
-      setCalfTestFail(calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
-      console.log("Did calf test fail?", calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
+      const [calfTogether, calfRight, calfLeft] = answers[calfTestIndex]
+      setCalfTestFail(calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
+      console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
+    }
+    const kneeTestIndex = questions.findIndex((q) => q.exerciseGroup === "Knee Strength")
+    if (kneeTestIndex !== -1) {
+      const kneeAnswers = answers[kneeTestIndex]
+      const lowestKneeValue = Math.min(...kneeAnswers)
+      const kneeExerciseNo = getKneeStrengthExerciseNo(lowestKneeValue)
+      setKneeExerciseNo(kneeExerciseNo)
+      console.log("Knee Exercise Lowest Value", lowestKneeValue)
+      console.log("Knee Exercise No:", kneeExerciseNo)
+    }
+    const gluteTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Medius Strength")
+    if (gluteTestIndex !== -1) {
+      const gluteAnswers = answers[gluteTestIndex]
+      const lowestGluteValue = Math.min(...gluteAnswers)
+      const gluteExerciseNo = getGluteusMediusStrengthExerciseNo(lowestGluteValue)
+      setGluteExerciseNo(gluteExerciseNo)
+      console.log("Gluteus Medius Strength Lowest Value", lowestGluteValue)
+      console.log("Gluteus Medius Exercise No:", gluteExerciseNo)
     }
   }
+
   const handleClientInfoSubmit = (info: ClientInfo) => {
     setClientInfo(info)
     setEditMode(false) // Exit edit mode after submitting
@@ -102,6 +163,7 @@ const Quiz: React.FC = () => {
   const handleCancelEdit = () => {
     setEditMode(false) // Cancel editing and revert changes
   }
+
   return (
     <div>
       {!clientInfo || editMode ? (
@@ -131,7 +193,12 @@ const Quiz: React.FC = () => {
           <button onClick={handleNextClick}>{currentQuestion < questions.length - 1 ? "Next" : "Finish"}</button>
         </>
       ) : (
-        <Results ankleTestFail={ankleTestFail} calfTestFail={calfTestFail} clientInfo={clientInfo} />
+        <Results
+          ankleTestFail={ankleTestFail}
+          calfTestFail={calfTestFail}
+          clientInfo={clientInfo}
+          // kneeExerciseNo={kneeExerciseNo}
+        />
       )}
       {editMode && <button onClick={handleCancelEdit}>Cancel</button>}
     </div>
