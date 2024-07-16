@@ -53,6 +53,14 @@ const questions: QuestionData[] = [
     exerciseGroup: "Gluteus Maximus Strength"
   },
   {
+    question: "Balance Test",
+    desc: "Record your results below",
+    eachSide: true,
+    numberOfEachSide: 2,
+    numberOfEachSideMessage: ["Eyes Open", "Eyes Closed"],
+    exerciseGroup: "Balance"
+  },
+  {
     question: "Calf Raise Test",
     desc: "Record your results below",
     eachSide: true,
@@ -85,6 +93,7 @@ const Quiz: React.FC = () => {
   const [gluteMedExerciseNo, setGluteMedExerciseNo] = useState<number | null>(null)
   const [hamstringExerciseNo, setHamstringExerciseNo] = useState<number | null>(null)
   const [gluteMaxExerciseNo, setGluteMaxExerciseNo] = useState<number | null>(null)
+  const [balanceExerciseNo, setBalanceExerciseNo] = useState<number | null>(null)
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null) // State for client information
   const [editMode, setEditMode] = useState(false) // State for edit mode
 
@@ -136,6 +145,13 @@ const Quiz: React.FC = () => {
     if (reps >= 10 && reps < 20) return 2
     if (reps >= 20 && reps < 30) return 3
     if (reps >= 30) return 4
+    return null
+  }
+
+  const getBalanceExerciseNo = (secs: number) => {
+    if (secs >= 0 && secs <= 5) return 1
+    if (secs > 5 && secs <= 9) return 2
+    if (secs > 9) return 3
     return null
   }
 
@@ -193,6 +209,16 @@ const Quiz: React.FC = () => {
       setGluteMaxExerciseNo(gluteMaxExerciseNo)
       console.log("Gluteus Maximus Strength Lowest Value", lowestGluteMaxValue)
       console.log("Gluteus Maximus Exercise No:", gluteMaxExerciseNo)
+    }
+
+    const balanceTestIndex = questions.findIndex((q) => q.exerciseGroup === "Balance")
+    if (balanceTestIndex !== -1) {
+      const balanceAnswers = answers[balanceTestIndex].filter((val) => val !== null)
+      const lowestBalanceValue = Math.min(...balanceAnswers)
+      const balanceExerciseNo = getBalanceExerciseNo(lowestBalanceValue)
+      setBalanceExerciseNo(balanceExerciseNo)
+      console.log("Balance Test Lowest Value", lowestBalanceValue)
+      console.log("Balance Exercise No:", balanceExerciseNo)
     }
   }
 
