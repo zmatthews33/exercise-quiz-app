@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react"
+
+// components
 import Question from "./Question"
 import Results from "./Results"
 import ClientForm from "./ClientForm"
+import { Container } from "react-bootstrap"
 
 // types
 import { masterExerciseList } from "../data/exerciseList"
@@ -34,8 +37,8 @@ type ExerciseCategory = {
 
 interface ExercisePath {
   Path: number
-  AnkleTestFail: string
-  CalfTestFail: string
+  AnkleTestFail: boolean
+  CalfTestFail: boolean
   WorkoutPerWeekNumber: number
   Workout1: string
   Workout2?: string
@@ -119,8 +122,8 @@ const Quiz: React.FC = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<number[][]>(initializeAnswers(questions))
   const [showResults, setShowResults] = useState(false)
-  const [ankleTestFail, setAnkleTestFail] = useState("NO")
-  const [calfTestFail, setCalfTestFail] = useState("NO")
+  const [ankleTestFail, setAnkleTestFail] = useState(false)
+  const [calfTestFail, setCalfTestFail] = useState(false)
   const [kneeExerciseNo, setKneeExerciseNo] = useState<number | null>(null)
   const [gluteMedExerciseNo, setGluteMedExerciseNo] = useState<number | null>(null)
   const [hamstringExerciseNo, setHamstringExerciseNo] = useState<number | null>(null)
@@ -129,7 +132,7 @@ const Quiz: React.FC = () => {
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null) // State for client information
   const [editMode, setEditMode] = useState(false) // State for edit mode
 
-  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const value = parseInt(e.target.value, 10) || 0 // Parse input value to number, default to 0 if NaN
     const newAnswers = [...answers]
 
@@ -204,15 +207,15 @@ const Quiz: React.FC = () => {
     const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
     if (ankleTestIndex !== -1) {
       const [_, ankleRight, ankleLeft] = answers[ankleTestIndex]
-      setAnkleTestFail(ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
-      console.log("Did ankle test fail?", ankleRight < 1 || ankleLeft < 1 ? "YES" : "NO")
+      setAnkleTestFail(ankleRight < 1 || ankleLeft < 1 ? true : false)
+      console.log("Did ankle test fail?", ankleRight < 1 || ankleLeft < 1 ? true : false)
     }
 
     const calfTestIndex = questions.findIndex((q) => q.exerciseGroup === "Calf Strength")
     if (calfTestIndex !== -1) {
       const [calfTogether, calfRight, calfLeft] = answers[calfTestIndex]
-      setCalfTestFail(calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
-      console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? "YES" : "NO")
+      setCalfTestFail(calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? true : false)
+      console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? true : false)
     }
 
     // Calculate exercise numbers
@@ -325,7 +328,7 @@ const Quiz: React.FC = () => {
   }
 
   return (
-    <div>
+    <Container className='mx-auto'>
       {!clientInfo || editMode ? (
         <ClientForm initialInfo={clientInfo} onSubmit={handleClientInfoSubmit} />
       ) : !showResults ? (
@@ -368,7 +371,7 @@ const Quiz: React.FC = () => {
         />
       )}
       {editMode && <button onClick={handleCancelEdit}>Cancel</button>}
-    </div>
+    </Container>
   )
 }
 

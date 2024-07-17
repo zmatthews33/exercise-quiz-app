@@ -1,24 +1,57 @@
-// src/App.tsx
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react"
+
+// components
 import Quiz from "./components/Quiz"
 import Results from "./components/Results"
 
-const App: React.FC = () => {
-  const [quizComplete, setQuizComplete] = useState(false)
-  const [score, setScore] = useState(0)
+// types
+import { ClientInfo } from "./components/ClientForm"
+import { Container } from "react-bootstrap"
 
-  const handleQuizComplete = (finalScore: number) => {
-    setScore(finalScore)
-    setQuizComplete(true)
-  }
+type Props = {
+  ankleTestFail: boolean
+  calfTestFail: boolean
+  clientInfo: ClientInfo
+  kneeExerciseNo: number
+  gluteMedExerciseNo: number
+  hamstringExerciseNo: number
+  gluteMaxExerciseNo: number
+  balanceExerciseNo: number
+}
+
+const App: React.FC<Props> = ({
+  ankleTestFail,
+  calfTestFail,
+  clientInfo,
+  kneeExerciseNo,
+  gluteMedExerciseNo,
+  hamstringExerciseNo,
+  gluteMaxExerciseNo,
+  balanceExerciseNo
+}) => {
+  const [quizComplete, setQuizComplete] = useState(false)
 
   return (
-    <div className='App'>
-      <header className='App-header'>
+    <Container className='App'>
+      <header className='App-header text-center pb-4'>
         <h1>Fitness Quiz</h1>
       </header>
-      {quizComplete ? <Results score={score} /> : <Quiz onQuizComplete={handleQuizComplete} />}
-    </div>
+      {quizComplete ? (
+        <Results
+          ankleTestFail={ankleTestFail}
+          calfTestFail={calfTestFail}
+          clientInfo={clientInfo}
+          kneeExerciseNo={kneeExerciseNo}
+          gluteMedExerciseNo={gluteMedExerciseNo}
+          hamstringExerciseNo={hamstringExerciseNo}
+          gluteMaxExerciseNo={gluteMaxExerciseNo}
+          balanceExerciseNo={balanceExerciseNo}
+        />
+      ) : (
+        <Quiz />
+      )}
+    </Container>
   )
 }
 

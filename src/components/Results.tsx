@@ -5,8 +5,8 @@ import exercisePaths from "../data/exercisePaths"
 import { ClientInfo } from "./ClientForm"
 
 interface ResultsProps {
-  ankleTestFail: string
-  calfTestFail: string
+  ankleTestFail: boolean
+  calfTestFail: boolean
   clientInfo: ClientInfo
   kneeExerciseNo: number | null
   gluteMedExerciseNo: number | null
@@ -55,9 +55,19 @@ const Results: React.FC<ResultsProps> = ({
                 filteredExercises.push(footStrengthExercise)
               }
             } else if (category === "Knee Strength Isometrics") {
-              const kneeStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (kneeStrengthExercise) {
-                filteredExercises.push(kneeStrengthExercise)
+              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (calfStrengthExercise) {
+                filteredExercises.push(calfStrengthExercise)
+              }
+            } else if (category === "Calf Strength") {
+              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (calfStrengthExercise) {
+                filteredExercises.push(calfStrengthExercise)
+              }
+            } else if (category === "Ankle Mobility") {
+              const ankleMobilityExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (ankleMobilityExercise) {
+                filteredExercises.push(ankleMobilityExercise)
               }
             } else {
               const exerciseNo = exerciseNumbers[category]
@@ -76,7 +86,8 @@ const Results: React.FC<ResultsProps> = ({
       }
 
       const exerciseNumbers = {
-        "Calf Strength": kneeExerciseNo,
+        "Calf Strength": calfTestFail === true ? 1 : null,
+        "Ankle Mobility": ankleTestFail === true ? 1 : null,
         "Knee Strength": kneeExerciseNo,
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
@@ -92,7 +103,16 @@ const Results: React.FC<ResultsProps> = ({
       setWeek2Exercises(week2ExercisesFiltered)
       setWeek3Exercises(week3ExercisesFiltered)
     }
-  }, [path, kneeExerciseNo, gluteMedExerciseNo, hamstringExerciseNo, gluteMaxExerciseNo, balanceExerciseNo])
+  }, [
+    path,
+    kneeExerciseNo,
+    gluteMedExerciseNo,
+    hamstringExerciseNo,
+    gluteMaxExerciseNo,
+    balanceExerciseNo,
+    calfTestFail,
+    ankleTestFail
+  ])
 
   if (!path) {
     console.error("No workout path found for the given test results and workout frequency.")
@@ -106,7 +126,7 @@ const Results: React.FC<ResultsProps> = ({
       <p>Did you fail the ankle test? {ankleTestFail}</p>
       <p>Did you fail the calf test? {calfTestFail}</p>
       <p>The selected path is: {path.Path}</p>
-
+      <h1>First Month</h1>
       <h2>Week 1</h2>
       <p>{path.Workout1}</p>
       <ul>
