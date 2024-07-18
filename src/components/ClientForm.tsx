@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react"
 
+// components
+import { Button, Container, FormLabel } from "react-bootstrap"
+import { TextField, Select, MenuItem } from "@mui/material"
+
 export interface ClientInfo {
   name: string
   email: string
-  workoutsPerWeek: number
+  workoutsPerWeek: number | string
 }
 interface ClientFormProps {
   onSubmit: (info: { name: string; email: string; workoutsPerWeek: number }) => void
@@ -19,7 +23,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
     if (initialInfo) {
       setName(initialInfo.name)
       setEmail(initialInfo.email)
-      setWorkoutsPerWeek(initialInfo.workoutsPerWeek)
+      setWorkoutsPerWeek(parseInt(String(initialInfo.workoutsPerWeek)))
     }
   }, [initialInfo])
 
@@ -29,18 +33,49 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Name:</label>
-      <input type='text' value={name} onChange={(e) => setName(e.target.value)} required />
-      <label>Email:</label>
-      <input type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
-      <label>Workouts per Week:</label>
-      <select value={workoutsPerWeek} onChange={(e) => setWorkoutsPerWeek(parseInt(e.target.value))} required>
-        <option value={2}>2</option>
-        <option value={3}>3</option>
-      </select>
-      <button type='submit'>Save</button>
-    </form>
+    <Container>
+      <form onSubmit={handleSubmit}>
+        <label className='form-label' htmlFor='name'>
+          *Name:
+        </label>
+        <TextField
+          id='name'
+          className='form-control mb-2'
+          // label='name'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <FormLabel className='form-label' htmlFor='email'>
+          *Email:
+        </FormLabel>
+        <TextField
+          id='email'
+          className='form-control mb-2'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <FormLabel className='form-label' htmlFor='workoutsPerWeek'>
+          *Workouts per Week:
+        </FormLabel>
+        <Select
+          labelId='workoutsPerWeek'
+          className='form-control mb-2'
+          id='workoutsPerWeek'
+          value={workoutsPerWeek}
+          onChange={(e) => setWorkoutsPerWeek(parseInt(e.target.value as string))}
+          required
+        >
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+        </Select>
+        <br />
+        <Button className='button d-block btn-lg submit-btn mx-auto mt-4' type='submit'>
+          Save
+        </Button>
+      </form>
+    </Container>
   )
 }
 

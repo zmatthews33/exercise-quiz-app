@@ -23,11 +23,11 @@ a:hover {
 }
 
 body {
-  margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  justify-content: center;
 }
 
 h1 {
@@ -42,12 +42,13 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #81a0ad;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border: 1px solid rgba(129, 160, 173, 0.724);
+  background-color: rgba(129, 160, 173, 0.724);
 }
 button:focus,
 button:focus-visible {
@@ -65,4 +66,44 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.submit-btn {
+  width: 84%;
+  margin-top: 1rem;
+}
+.back-btn {
+  width: 84%;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+  color: #81a0ad;
+  border-color: #7d99a5;
+}
+
+.client-info-div {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2rem 2rem;
+}
+
+.questions-div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  width: 800px;
+  border: 1px solid #49616b;
+  border-radius: 4px;
+  padding: 2rem;
+  margin-bottom: 8rem;
+}
+
+.pass-color {
+  color: green;
+}
+.fail-color {
+  color: red;
+}
+
+.accordion {
+  background-color: #f3f3f3 !important;
 }
