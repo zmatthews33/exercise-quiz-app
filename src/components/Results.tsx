@@ -1,8 +1,27 @@
 import React, { useEffect, useState } from "react"
-import { masterExerciseList } from "../data/exerciseList"
+
+// components
 import { Exercise } from "../components/Quiz"
-import exercisePaths from "../data/exercisePaths"
 import { ClientInfo } from "./ClientForm"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
+} from "@mui/material"
+import { Container } from "react-bootstrap"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+
+// data
+import { masterExerciseList } from "../data/exerciseList"
+import exercisePaths from "../data/exercisePaths"
 
 interface ResultsProps {
   ankleTestFail: boolean
@@ -37,6 +56,12 @@ const Results: React.FC<ResultsProps> = ({
   const [week1Exercises, setWeek1Exercises] = useState<Exercise[]>([])
   const [week2Exercises, setWeek2Exercises] = useState<Exercise[]>([])
   const [week3Exercises, setWeek3Exercises] = useState<Exercise[]>([])
+  const [exerciseScores, setExerciseScores] = useState<
+    {
+      category: string
+      score: number
+    }[]
+  >([])
 
   useEffect(() => {
     if (path) {
@@ -68,6 +93,11 @@ const Results: React.FC<ResultsProps> = ({
               const ankleMobilityExercise = exercises.find((ex) => ex.ExerciseNo === 1)
               if (ankleMobilityExercise) {
                 filteredExercises.push(ankleMobilityExercise)
+              }
+            } else if (category === "Front Planks") {
+              const frontPlankExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              if (frontPlankExercise) {
+                filteredExercises.push(frontPlankExercise)
               }
             } else {
               const exerciseNo = exerciseNumbers[category]
@@ -102,6 +132,16 @@ const Results: React.FC<ResultsProps> = ({
       setWeek1Exercises(week1ExercisesFiltered)
       setWeek2Exercises(week2ExercisesFiltered)
       setWeek3Exercises(week3ExercisesFiltered)
+
+      // Collect all exercises to determine the scores
+      const allExercises = [...week1ExercisesFiltered, ...week2ExercisesFiltered, ...week3ExercisesFiltered]
+      const scores: { category: string; score: number }[] = []
+      allExercises.forEach((exercise) => {
+        if (!scores.find((score) => score.category === exercise.Category)) {
+          scores.push({ category: exercise.Category, score: exercise.ExerciseNo })
+        }
+      })
+      setExerciseScores(scores)
     }
   }, [
     path,
@@ -119,67 +159,126 @@ const Results: React.FC<ResultsProps> = ({
     return null
   }
 
-  return (
-    <div>
-      <p>Based on the results of your tests...</p>
-      <p>Here are some exercises for you:</p>
-      <p>Did you fail the ankle test? {ankleTestFail}</p>
-      <p>Did you fail the calf test? {calfTestFail}</p>
-      <p>The selected path is: {path.Path}</p>
-      <h1>First Month</h1>
-      <h2>Week 1</h2>
-      <p>{path.Workout1}</p>
-      <ul>
-        {week1Exercises.map((exercise, index) => (
-          <li key={index}>
-            <strong>
-              <p>
-                Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
-              </p>
-            </strong>
-            {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
-            {exercise.Rest}, Notes: {exercise.Notes}
-          </li>
-        ))}
-      </ul>
-
-      <h2>Week 2</h2>
-      <p>{path.Workout2}</p>
-      <ul>
-        {week2Exercises.map((exercise, index) => (
-          <li key={index}>
-            <strong>
-              <p>
-                Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
-              </p>
-            </strong>
-            {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
-            {exercise.Rest}, Notes: {exercise.Notes}
-            <a href={exercise.Link}>Link</a>
-          </li>
-        ))}
-      </ul>
-
-      {week3Exercises.length > 0 && (
-        <>
-          <h2>Week 3</h2>
-          <p>{path.Workout3}</p>
-          <ul>
-            {week3Exercises.map((exercise, index) => (
-              <li key={index}>
-                <strong>
-                  <p>
-                    Category: {exercise.Category} - Score Value: {exercise.ExerciseNo}
-                  </p>
-                </strong>
-                {exercise.Exercise} - Sets: {exercise.Sets}, Reps: {exercise.Reps}, Hold: {exercise.Hold}, Rest:{" "}
-                {exercise.Rest}, Notes: {exercise.Notes}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+  const renderExercisesScores = (scores: { category: string; score: number }[]) => (
+    <div className='mb-4'>
+      <Accordion className='accordion'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant='h5'>Expand Results</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <strong>
+            <p>Path: {path.Path}</p>
+          </strong>
+          <strong>
+            <p>
+              Ankle Test:
+              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+            </p>
+          </strong>
+          <strong>
+            <p>
+              Calf Test:{" "}
+              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+            </p>
+          </strong>
+          <TableContainer component={Paper}>
+            <Table style={{ tableLayout: "fixed" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <strong>Category</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Score</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {scores.map((score, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{score.category}</TableCell>
+                    <TableCell>{score.score}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </AccordionDetails>
+      </Accordion>
     </div>
+  )
+
+  const renderExercisesTable = (exercises: Exercise[], week: number) => (
+    <div className='mb-4'>
+      <Accordion className='accordion'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant='h5'>Workout {week}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <TableContainer component={Paper}>
+            <Table style={{ tableLayout: "fixed" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <strong>Category</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Exercise</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Sets</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Reps</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Hold (secs)</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Rest (mins)</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Notes</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Link</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {exercises.map((exercise, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{exercise.Category}</TableCell>
+                    <TableCell>{exercise.Exercise}</TableCell>
+                    <TableCell>{exercise.Sets}</TableCell>
+                    <TableCell>{exercise.Reps}</TableCell>
+                    <TableCell>{exercise.Hold}</TableCell>
+                    <TableCell>{exercise.Rest}</TableCell>
+                    <TableCell>{exercise.Notes}</TableCell>
+                    <TableCell>
+                      <a href={exercise.Link}>Link</a>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </AccordionDetails>
+      </Accordion>
+    </div>
+  )
+
+  return (
+    <Container>
+      <div className='mb-4 results-div'>
+        <Typography variant='h4'>Results</Typography>
+        {renderExercisesScores(exerciseScores)}
+        <Typography variant='h4'>Month 1</Typography>
+        {week1Exercises.length > 0 && renderExercisesTable(week1Exercises, 1)}
+        {week2Exercises.length > 0 && renderExercisesTable(week2Exercises, 2)}
+        {week3Exercises.length > 0 && renderExercisesTable(week3Exercises, 3)}
+      </div>
+    </Container>
   )
 }
 

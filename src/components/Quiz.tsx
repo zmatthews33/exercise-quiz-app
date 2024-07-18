@@ -328,47 +328,62 @@ const Quiz: React.FC = () => {
   }
 
   return (
-    <Container className='mx-auto'>
+    <Container>
       {!clientInfo || editMode ? (
         <ClientForm initialInfo={clientInfo} onSubmit={handleClientInfoSubmit} />
       ) : !showResults ? (
-        <>
-          <h2>Client Information:</h2>
-          <p>Name: {clientInfo.name}</p>
-          <p>Email: {clientInfo.email}</p>
-          <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
+        <Container>
+          <div className='client-info-div'>
+            <h2>Client Information:</h2>
+            <p>Name: {clientInfo.name}</p>
+            <p>Email: {clientInfo.email}</p>
+            <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
 
-          <button onClick={handleEditClick}>Edit</button>
-
-          <Question
-            question={questions[currentQuestion].question}
-            desc={questions[currentQuestion].desc}
-            eachSide={questions[currentQuestion].eachSide}
-            eachSideMessage={questions[currentQuestion].eachSideMessage}
-            bothSidesTogether={questions[currentQuestion].bothSidesTogether}
-            bothSidesTogetherMessage={questions[currentQuestion].bothSidesTogetherMessage}
-            numberOfEachSide={questions[currentQuestion].numberOfEachSide}
-            numberOfEachSideMessage={questions[currentQuestion].numberOfEachSideMessage}
-            exerciseGroup={questions[currentQuestion].exerciseGroup}
-            answer={answers[currentQuestion]}
-            onAnswerChange={handleAnswerChange}
-          />
-
-          {currentQuestion > 0 && <button onClick={handleBackClick}>Back</button>}
-
-          <button onClick={handleNextClick}>{currentQuestion < questions.length - 1 ? "Next" : "Finish"}</button>
-        </>
+            <button onClick={handleEditClick}>Edit</button>
+          </div>
+          <div className='questions-div'>
+            <Question
+              question={questions[currentQuestion].question}
+              desc={questions[currentQuestion].desc}
+              eachSide={questions[currentQuestion].eachSide}
+              eachSideMessage={questions[currentQuestion].eachSideMessage}
+              bothSidesTogether={questions[currentQuestion].bothSidesTogether}
+              bothSidesTogetherMessage={questions[currentQuestion].bothSidesTogetherMessage}
+              numberOfEachSide={questions[currentQuestion].numberOfEachSide}
+              numberOfEachSideMessage={questions[currentQuestion].numberOfEachSideMessage}
+              exerciseGroup={questions[currentQuestion].exerciseGroup}
+              answer={answers[currentQuestion]}
+              onAnswerChange={handleAnswerChange}
+            />
+            <button className='submit-btn mx-auto' onClick={handleNextClick}>
+              {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
+            </button>
+            {currentQuestion > 0 && (
+              <button className='back-btn mx-auto' onClick={handleBackClick}>
+                Back
+              </button>
+            )}
+          </div>
+        </Container>
       ) : (
-        <Results
-          ankleTestFail={ankleTestFail}
-          calfTestFail={calfTestFail}
-          clientInfo={clientInfo}
-          kneeExerciseNo={kneeExerciseNo}
-          gluteMedExerciseNo={gluteMedExerciseNo}
-          gluteMaxExerciseNo={gluteMaxExerciseNo}
-          hamstringExerciseNo={hamstringExerciseNo}
-          balanceExerciseNo={balanceExerciseNo}
-        />
+        <>
+          <div className='client-info-div'>
+            <h2>Client Information:</h2>
+            <p>Name: {clientInfo.name}</p>
+            <p>Email: {clientInfo.email}</p>
+            <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
+          </div>
+          <Results
+            ankleTestFail={ankleTestFail}
+            calfTestFail={calfTestFail}
+            clientInfo={clientInfo}
+            kneeExerciseNo={kneeExerciseNo}
+            gluteMedExerciseNo={gluteMedExerciseNo}
+            gluteMaxExerciseNo={gluteMaxExerciseNo}
+            hamstringExerciseNo={hamstringExerciseNo}
+            balanceExerciseNo={balanceExerciseNo}
+          />
+        </>
       )}
       {editMode && <button onClick={handleCancelEdit}>Cancel</button>}
     </Container>

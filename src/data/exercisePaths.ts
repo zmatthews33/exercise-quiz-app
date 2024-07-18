@@ -48,7 +48,7 @@ export const exercisePaths: ExercisePath[] = [
     WorkoutPerWeekNumber: 3,
     Workout1: "Calf Strength, Knee Strength, Foot Strength",
     Workout2: "Hamstring Strength, Gluteus Maximus Strength, Ankle Mobility",
-    Workout3: "Front Plank, Balance, Gluteus Medius Strength"
+    Workout3: "Front Planks, Balance, Gluteus Medius Strength"
   },
   {
     Path: 6,
@@ -57,7 +57,7 @@ export const exercisePaths: ExercisePath[] = [
     WorkoutPerWeekNumber: 3,
     Workout1: "Knee Strength, Hamstring Strength, Foot Strength",
     Workout2: "Hamstring Strength, Gluteus Maximus Strength, Ankle Mobility",
-    Workout3: "Front Plank, Balance, Gluteus Medius Strength"
+    Workout3: "Front Planks, Balance, Gluteus Medius Strength"
   },
   {
     Path: 7,
@@ -66,7 +66,7 @@ export const exercisePaths: ExercisePath[] = [
     WorkoutPerWeekNumber: 3,
     Workout1: "Calf Strength, Knee Strength, Hamstring Strength",
     Workout2: "Gluteus Maximus Strength, Knee Strength Isometrics, Foot Strength",
-    Workout3: "Front Plank, Balance, Gluteus Medius Strength"
+    Workout3: "Front Planks, Balance, Gluteus Medius Strength"
   },
   {
     Path: 8,
@@ -75,7 +75,7 @@ export const exercisePaths: ExercisePath[] = [
     WorkoutPerWeekNumber: 3,
     Workout1: "Knee Strength, Hamstring Strength, Foot Strength",
     Workout2: "Gluteus Maximus Strength, Knee Strength Isometrics, Foot Strength",
-    Workout3: "Front Plank, Balance, Gluteus Medius Strength"
+    Workout3: "Front Planks, Balance, Gluteus Medius Strength"
   }
 ]
 

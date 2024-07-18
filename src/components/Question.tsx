@@ -1,7 +1,6 @@
 import React from "react"
 
 // components
-import { Container } from "react-bootstrap"
 import { TextField } from "@mui/material"
 
 interface QuestionProps {
@@ -31,7 +30,7 @@ const Question: React.FC<QuestionProps> = ({
   onAnswerChange
 }) => {
   return (
-    <Container>
+    <>
       <h3>{question}</h3>
       <p>{desc}</p>
       {bothSidesTogether && (
@@ -39,6 +38,7 @@ const Question: React.FC<QuestionProps> = ({
           {bothSidesTogetherMessage && <h4>{bothSidesTogetherMessage}</h4>}
           {/* <FormLabel>Together:</FormLabel> */}
           <TextField
+            className='form-control question-input'
             label='Together'
             value={answer[0] !== null ? answer[0] : ""}
             onChange={(e) => onAnswerChange(e, 0)}
@@ -55,6 +55,7 @@ const Question: React.FC<QuestionProps> = ({
                   <div className='mb-2'>
                     {/* <FormLabel>Right:</FormLabel> */}
                     <TextField
+                      className='form-control'
                       label='Right'
                       required
                       value={answer[index * 2 + 1] !== null ? answer[index * 2 + 1] : ""}
@@ -64,6 +65,7 @@ const Question: React.FC<QuestionProps> = ({
                   <div className='mb-2'>
                     {/* <FormLabel>Left:</FormLabel> */}
                     <TextField
+                      className='form-control'
                       label='Left'
                       required
                       value={answer[index * 2 + 2] !== null ? answer[index * 2 + 2] : ""}
@@ -78,6 +80,7 @@ const Question: React.FC<QuestionProps> = ({
               <div className='mb-2'>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
                 <TextField
+                  className='form-control question-input'
                   required
                   label='Right'
                   value={answer[1] !== null ? answer[1] : ""}
@@ -86,6 +89,7 @@ const Question: React.FC<QuestionProps> = ({
               </div>
               <div className='mb-2'>
                 <TextField
+                  className='form-control'
                   label='Left'
                   required
                   value={answer[2] !== null ? answer[2] : ""}
@@ -98,13 +102,13 @@ const Question: React.FC<QuestionProps> = ({
       )}
       {!eachSide && !bothSidesTogether && (
         <TextField
-          className='mb-2'
+          className='mb-2 form-control'
           required
           value={answer[0] !== null ? answer[0] : ""}
           onChange={(e) => onAnswerChange(e, 0)}
         />
       )}
-    </Container>
+    </>
   )
 }
 
