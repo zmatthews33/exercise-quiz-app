@@ -141,7 +141,9 @@ const Quiz: React.FC<QuizProps> = () => {
     } else {
       // Calculate results
       calculateResults()
-      setQuizComplete(true)
+      if (quizComplete) {
+        setQuizComplete(true)
+      }
       setShowResults(true)
     }
   }
