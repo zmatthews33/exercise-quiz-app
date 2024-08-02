@@ -44,6 +44,10 @@ const Results: React.FC<ResultsProps> = ({
   gluteMaxExerciseNo,
   balanceExerciseNo
 }) => {
+  if (!clientInfo) {
+    console.error("Client information is not available.")
+    return null // or some fallback UI
+  }
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
@@ -122,9 +126,7 @@ const Results: React.FC<ResultsProps> = ({
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
         "Gluteus Maximus Strength": gluteMaxExerciseNo,
-        Balance: balanceExerciseNo,
-        "Foot Strength": 1,
-        "Knee Strength Isometrics": 1
+        Balance: balanceExerciseNo
       }
 
       const week1ExercisesFiltered = filterExercises(categoriesWeek1, exerciseNumbers)

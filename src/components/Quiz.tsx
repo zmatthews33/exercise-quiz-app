@@ -12,7 +12,7 @@ import { masterExerciseList } from "../data/exerciseList"
 import { exercisePaths } from "../data/exercisePaths"
 
 type QuizProps = {
-  setQuizComplete: (complete: boolean) => void
+  setQuizComplete: (quizComplete: boolean) => void
 }
 export interface ClientInfo {
   name: string
@@ -32,20 +32,6 @@ export type Exercise = {
   Notes: string
   isAddOn: string
   Category: string
-}
-
-type ExerciseCategory = {
-  [key: string]: Exercise[]
-}
-
-interface ExercisePath {
-  Path: number
-  AnkleTestFail: boolean
-  CalfTestFail: boolean
-  WorkoutPerWeekNumber: number
-  Workout1: string
-  Workout2?: string
-  Workout3?: string
 }
 
 interface QuestionData {
@@ -121,7 +107,7 @@ const initializeAnswers = (questions: QuestionData[]) => {
   })
 }
 
-const Quiz: React.FC<QuizProps> = ({ setQuizComplete }) => {
+const Quiz: React.FC<QuizProps> = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<number[][]>(initializeAnswers(questions))
   const [showResults, setShowResults] = useState(false)
@@ -134,6 +120,8 @@ const Quiz: React.FC<QuizProps> = ({ setQuizComplete }) => {
   const [balanceExerciseNo, setBalanceExerciseNo] = useState<number | null>(null)
   const [clientInfo, setClientInfo] = useState<ClientInfo | null>(null) // State for client information
   const [editMode, setEditMode] = useState(false) // State for edit mode
+
+  const [quizComplete, setQuizComplete] = useState<boolean>(false)
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const value = parseInt(e.target.value, 10) || 0 // Parse input value to number, default to 0 if NaN
@@ -155,8 +143,8 @@ const Quiz: React.FC<QuizProps> = ({ setQuizComplete }) => {
     } else {
       // Calculate results
       calculateResults()
-      setShowResults(true)
       setQuizComplete(true)
+      setShowResults(true)
     }
   }
 
