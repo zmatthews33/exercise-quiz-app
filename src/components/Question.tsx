@@ -1,5 +1,8 @@
 import React from "react"
 
+// components
+import { TextField } from "@mui/material"
+
 interface QuestionProps {
   question: string
   desc?: string
@@ -11,7 +14,7 @@ interface QuestionProps {
   numberOfEachSideMessage?: string[]
   exerciseGroup?: string
   answer: number[]
-  onAnswerChange: (e: React.ChangeEvent<HTMLInputElement>, side: number) => void
+  onAnswerChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, side: number) => void
 }
 
 const Question: React.FC<QuestionProps> = ({
@@ -27,14 +30,19 @@ const Question: React.FC<QuestionProps> = ({
   onAnswerChange
 }) => {
   return (
-    <div>
+    <>
       <h3>{question}</h3>
       <p>{desc}</p>
       {bothSidesTogether && (
         <div>
           {bothSidesTogetherMessage && <h4>{bothSidesTogetherMessage}</h4>}
-          <label>Together:</label>
-          <input type='text' value={answer[0] !== null ? answer[0] : ""} onChange={(e) => onAnswerChange(e, 0)} />
+          {/* <FormLabel>Together:</FormLabel> */}
+          <TextField
+            className='form-control question-input'
+            label='Together'
+            value={answer[0] !== null ? answer[0] : ""}
+            onChange={(e) => onAnswerChange(e, 0)}
+          />
         </div>
       )}
       {eachSide && (
@@ -44,19 +52,21 @@ const Question: React.FC<QuestionProps> = ({
               {numberOfEachSideMessage.map((message, index) => (
                 <div key={index}>
                   <h4>{message}</h4>
-                  <div>
-                    <label>Right:</label>
-                    <input
-                      type='text'
+                  <div className='mb-2'>
+                    {/* <FormLabel>Right:</FormLabel> */}
+                    <TextField
+                      className='form-control'
+                      label='Right'
                       required
                       value={answer[index * 2 + 1] !== null ? answer[index * 2 + 1] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 1)}
                     />
                   </div>
-                  <div>
-                    <label>Left:</label>
-                    <input
-                      type='text'
+                  <div className='mb-2'>
+                    {/* <FormLabel>Left:</FormLabel> */}
+                    <TextField
+                      className='form-control'
+                      label='Left'
                       required
                       value={answer[index * 2 + 2] !== null ? answer[index * 2 + 2] : ""}
                       onChange={(e) => onAnswerChange(e, index * 2 + 2)}
@@ -67,20 +77,20 @@ const Question: React.FC<QuestionProps> = ({
             </div>
           ) : (
             <>
-              <div>
+              <div className='mb-2'>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
-                <label>Right:</label>
-                <input
-                  type='text'
+                <TextField
+                  className='form-control question-input'
                   required
+                  label='Right'
                   value={answer[1] !== null ? answer[1] : ""}
                   onChange={(e) => onAnswerChange(e, 1)}
                 />
               </div>
-              <div>
-                <label>Left:</label>
-                <input
-                  type='text'
+              <div className='mb-2'>
+                <TextField
+                  className='form-control'
+                  label='Left'
                   required
                   value={answer[2] !== null ? answer[2] : ""}
                   onChange={(e) => onAnswerChange(e, 2)}
@@ -91,14 +101,14 @@ const Question: React.FC<QuestionProps> = ({
         </>
       )}
       {!eachSide && !bothSidesTogether && (
-        <input
-          type='text'
+        <TextField
+          className='mb-2 form-control'
           required
           value={answer[0] !== null ? answer[0] : ""}
           onChange={(e) => onAnswerChange(e, 0)}
         />
       )}
-    </div>
+    </>
   )
 }
 
