@@ -44,6 +44,10 @@ const Results: React.FC<ResultsProps> = ({
   gluteMaxExerciseNo,
   balanceExerciseNo
 }) => {
+  if (!clientInfo) {
+    console.error("Client information is not available.")
+    return null // or some fallback UI
+  }
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
@@ -172,13 +176,13 @@ const Results: React.FC<ResultsProps> = ({
           <strong>
             <p>
               Ankle Test:
-              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
             </p>
           </strong>
           <strong>
             <p>
               Calf Test:{" "}
-              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
             </p>
           </strong>
           <TableContainer component={Paper}>
