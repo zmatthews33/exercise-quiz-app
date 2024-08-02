@@ -1,7 +1,7 @@
 {
   "homepage": "https://zmatthews33.github.io/exercise-quiz-app",
   "name": "quiz-app",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
