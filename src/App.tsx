@@ -49,7 +49,7 @@ const App: React.FC<Props> = ({
           balanceExerciseNo={balanceExerciseNo}
         />
       ) : (
-        <Quiz />
+        <Quiz setQuizComplete={setQuizComplete} />
       )}
     </Container>
   )

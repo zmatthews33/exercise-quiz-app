@@ -122,7 +122,9 @@ const Results: React.FC<ResultsProps> = ({
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
         "Gluteus Maximus Strength": gluteMaxExerciseNo,
-        Balance: balanceExerciseNo
+        Balance: balanceExerciseNo,
+        "Foot Strength": 1,
+        "Knee Strength Isometrics": 1
       }
 
       const week1ExercisesFiltered = filterExercises(categoriesWeek1, exerciseNumbers)
@@ -172,13 +174,13 @@ const Results: React.FC<ResultsProps> = ({
           <strong>
             <p>
               Ankle Test:
-              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
             </p>
           </strong>
           <strong>
             <p>
               Calf Test:{" "}
-              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
+              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
             </p>
           </strong>
           <TableContainer component={Paper}>

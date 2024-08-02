@@ -11,6 +11,9 @@ import { Container } from "react-bootstrap"
 import { masterExerciseList } from "../data/exerciseList"
 import { exercisePaths } from "../data/exercisePaths"
 
+type QuizProps = {
+  setQuizComplete: (complete: boolean) => void
+}
 export interface ClientInfo {
   name: string
   email: string
@@ -118,7 +121,7 @@ const initializeAnswers = (questions: QuestionData[]) => {
   })
 }
 
-const Quiz: React.FC = () => {
+const Quiz: React.FC<QuizProps> = ({ setQuizComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<number[][]>(initializeAnswers(questions))
   const [showResults, setShowResults] = useState(false)
@@ -153,6 +156,7 @@ const Quiz: React.FC = () => {
       // Calculate results
       calculateResults()
       setShowResults(true)
+      setQuizComplete(true)
     }
   }
 
