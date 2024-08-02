@@ -9,7 +9,6 @@ import { Container } from "react-bootstrap"
 
 // types
 import { masterExerciseList } from "../data/exerciseList"
-import { exercisePaths } from "../data/exercisePaths"
 
 type QuizProps = {
   setQuizComplete: (quizComplete: boolean) => void
@@ -33,7 +32,6 @@ export type Exercise = {
   isAddOn: string
   Category: string
 }
-
 interface QuestionData {
   question: string
   desc?: string
