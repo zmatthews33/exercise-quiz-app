@@ -9,7 +9,6 @@ import { Container } from "react-bootstrap"
 
 // types
 import { masterExerciseList } from "../data/exerciseList"
-import { exercisePaths } from "../data/exercisePaths"
 
 export interface ClientInfo {
   name: string
@@ -31,19 +30,19 @@ export type Exercise = {
   Category: string
 }
 
-type ExerciseCategory = {
-  [key: string]: Exercise[]
-}
+// type ExerciseCategory = {
+//   [key: string]: Exercise[]
+// }
 
-interface ExercisePath {
-  Path: number
-  AnkleTestFail: boolean
-  CalfTestFail: boolean
-  WorkoutPerWeekNumber: number
-  Workout1: string
-  Workout2?: string
-  Workout3?: string
-}
+// interface ExercisePath {
+//   Path: number
+//   AnkleTestFail: boolean
+//   CalfTestFail: boolean
+//   WorkoutPerWeekNumber: number
+//   Workout1: string
+//   Workout2?: string
+//   Workout3?: string
+// }
 
 interface QuestionData {
   question: string

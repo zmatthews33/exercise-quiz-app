@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react"
 
@@ -30,6 +31,7 @@ const App: React.FC<Props> = ({
   gluteMaxExerciseNo,
   balanceExerciseNo
 }) => {
+  // @ts-expect-error
   const [quizComplete, setQuizComplete] = useState(false)
 
   return (
