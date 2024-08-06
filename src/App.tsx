@@ -34,7 +34,7 @@ const App: React.FC<Props> = ({
   return (
     <Container className='App'>
       <header className='App-header text-center pb-4'>
-        <h1>Fitness Quiz</h1>
+        <h1>Screening Form</h1>
       </header>
       {quizComplete ? (
         <Results
