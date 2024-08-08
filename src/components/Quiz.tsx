@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import Question from "./Question"
 import Results from "./Results"
 import ClientForm from "./ClientForm"
-import { Container } from "react-bootstrap"
+import { Container, Row } from "react-bootstrap"
 
 // types
 import { masterExerciseList } from "../data/exerciseList"
@@ -322,8 +322,20 @@ const Quiz: React.FC<QuizProps> = () => {
   return (
     <Container>
       {!clientInfo || editMode ? (
-        <ClientForm initialInfo={clientInfo} onSubmit={handleClientInfoSubmit} />
-      ) : !showResults ? (
+        // <Container>
+        <>
+          <ClientForm initialInfo={clientInfo} onSubmit={handleClientInfoSubmit} />
+
+          {editMode && (
+            <Row>
+              <button className='cancel-button' onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            </Row>
+          )}
+        </>
+      ) : // </Container>
+      !showResults ? (
         <Container>
           <div className='client-info-div'>
             <h2>Client Information:</h2>
@@ -331,7 +343,9 @@ const Quiz: React.FC<QuizProps> = () => {
             <p>Email: {clientInfo.email}</p>
             <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
 
-            <button onClick={handleEditClick}>Edit</button>
+            <button className='edit-button' onClick={handleEditClick}>
+              Edit
+            </button>
           </div>
           <div className='questions-div'>
             <Question
@@ -377,7 +391,6 @@ const Quiz: React.FC<QuizProps> = () => {
           />
         </>
       )}
-      {editMode && <button onClick={handleCancelEdit}>Cancel</button>}
     </Container>
   )
 }
