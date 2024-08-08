@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 // components
-import { Button, Container, FormLabel } from "react-bootstrap"
+import { Container, FormLabel } from "react-bootstrap"
 import { TextField, Select, MenuItem } from "@mui/material"
 
 export interface ClientInfo {
@@ -34,7 +34,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
 
   return (
     <Container>
-      <form onSubmit={handleSubmit}>
+      <form className='client-form' onSubmit={handleSubmit}>
         <label className='form-label' htmlFor='name'>
           *Name:
         </label>
@@ -45,6 +45,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          type='text'
         />
         <FormLabel className='form-label' htmlFor='email'>
           *Email:
@@ -55,6 +56,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          type='email'
         />
         <FormLabel className='form-label' htmlFor='workoutsPerWeek'>
           *Workouts per Week:
@@ -71,9 +73,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, initialInfo }) => {
           <MenuItem value={3}>3</MenuItem>
         </Select>
         <br />
-        <Button className='button d-block btn-lg submit-btn mx-auto mt-4' type='submit'>
+        <button className='submit-btn mx-auto mt-4 mb-4' type='submit'>
           Save
-        </Button>
+        </button>
       </form>
     </Container>
   )
