@@ -44,10 +44,6 @@ const Results: React.FC<ResultsProps> = ({
   gluteMaxExerciseNo,
   balanceExerciseNo
 }) => {
-  if (!clientInfo) {
-    console.error("Client information is not available.")
-    return null // or some fallback UI
-  }
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
@@ -57,9 +53,9 @@ const Results: React.FC<ResultsProps> = ({
       p.WorkoutPerWeekNumber === workoutPerWeekNumber
   )
 
-  const [week1Exercises, setWeek1Exercises] = useState<Exercise[]>([])
-  const [week2Exercises, setWeek2Exercises] = useState<Exercise[]>([])
-  const [week3Exercises, setWeek3Exercises] = useState<Exercise[]>([])
+  const [month1Exercises, setMonth1Exercises] = useState<Exercise[][]>([])
+  const [month2Exercises, setMonth2Exercises] = useState<Exercise[][]>([])
+  const [month3Exercises, setMonth3Exercises] = useState<Exercise[][]>([])
   const [exerciseScores, setExerciseScores] = useState<
     {
       category: string
@@ -131,11 +127,33 @@ const Results: React.FC<ResultsProps> = ({
 
       const week1ExercisesFiltered = filterExercises(categoriesWeek1, exerciseNumbers)
       const week2ExercisesFiltered = filterExercises(categoriesWeek2, exerciseNumbers)
-      const week3ExercisesFiltered = filterExercises(categoriesWeek3, exerciseNumbers)
+      const week3ExercisesFiltered =
+        clientInfo.workoutsPerWeek === 3 ? filterExercises(categoriesWeek3, exerciseNumbers) : []
 
-      setWeek1Exercises(week1ExercisesFiltered)
-      setWeek2Exercises(week2ExercisesFiltered)
-      setWeek3Exercises(week3ExercisesFiltered)
+      const allWeeks =
+        clientInfo.workoutsPerWeek === 3
+          ? [week1ExercisesFiltered, week2ExercisesFiltered, week3ExercisesFiltered]
+          : [week1ExercisesFiltered, week2ExercisesFiltered]
+
+      setMonth1Exercises(allWeeks)
+      setMonth2Exercises(
+        allWeeks.map((week) =>
+          week.map((exercise) => {
+            return (
+              masterExerciseList[exercise.Category]?.find((ex) => ex.ExerciseNo === exercise.ExerciseNo + 1) || exercise
+            )
+          })
+        )
+      )
+      setMonth3Exercises(
+        allWeeks.map((week) =>
+          week.map((exercise) => {
+            return (
+              masterExerciseList[exercise.Category]?.find((ex) => ex.ExerciseNo === exercise.ExerciseNo + 2) || exercise
+            )
+          })
+        )
+      )
 
       // Collect all exercises to determine the scores
       const allExercises = [...week1ExercisesFiltered, ...week2ExercisesFiltered, ...week3ExercisesFiltered]
@@ -274,14 +292,18 @@ const Results: React.FC<ResultsProps> = ({
 
   return (
     <Container>
-      <div className='mb-4 results-div'>
-        <Typography variant='h4'>Results</Typography>
-        {renderExercisesScores(exerciseScores)}
-        <Typography variant='h4'>Month 1</Typography>
-        {week1Exercises.length > 0 && renderExercisesTable(week1Exercises, 1)}
-        {week2Exercises.length > 0 && renderExercisesTable(week2Exercises, 2)}
-        {week3Exercises.length > 0 && renderExercisesTable(week3Exercises, 3)}
-      </div>
+      <h2>Workout Program</h2>
+
+      {renderExercisesScores(exerciseScores)}
+
+      <h3>Month 1</h3>
+      {month1Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
+
+      <h3>Month 2</h3>
+      {month2Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
+
+      <h3>Month 3</h3>
+      {month3Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
     </Container>
   )
 }
