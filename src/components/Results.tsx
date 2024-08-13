@@ -44,10 +44,6 @@ const Results: React.FC<ResultsProps> = ({
   gluteMaxExerciseNo,
   balanceExerciseNo
 }) => {
-  if (!clientInfo) {
-    console.error("Client information is not available.")
-    return null // or some fallback UI
-  }
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
