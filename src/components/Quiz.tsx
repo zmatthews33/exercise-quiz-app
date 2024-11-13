@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react"
+import axios from "axios"
 
 // components
 import Question from "./Question"
@@ -40,14 +41,15 @@ interface QuestionData {
   bothSidesTogether?: boolean
   bothSidesTogetherMessage?: string
   numberOfEachSide?: number
-  numberOfEachSideMessage?: string[]
+  messageOne?: string
+  messageTwo?: string
   exerciseGroup?: string
 }
 
 const questions: QuestionData[] = [
   {
     question: "Dorsiflexion Mobility Test",
-    desc: "Record your distance from the wall below",
+    desc: "Record your distance from the wall below (in inches)",
     eachSide: true,
     exerciseGroup: "Ankle Mobility"
   },
@@ -64,7 +66,8 @@ const questions: QuestionData[] = [
     question: "Side Plank Test",
     eachSide: true,
     numberOfEachSide: 2,
-    numberOfEachSideMessage: ["Version 1", "Version 2"],
+    messageOne: "Version 1",
+    messageTwo: "Version 2",
     exerciseGroup: "Gluteus Medius Strength"
   },
   { question: "Hamstring Bridge Test", desc: "Record reps below", eachSide: true, exerciseGroup: "Hamstring Strength" },
@@ -76,15 +79,16 @@ const questions: QuestionData[] = [
   },
   {
     question: "Balance Test",
-    desc: "Record your results below",
+    desc: "Record your results below (in seconds)",
     eachSide: true,
     numberOfEachSide: 2,
-    numberOfEachSideMessage: ["Eyes Open", "Eyes Closed"],
+    messageOne: "Eyes Open",
+    messageTwo: "Eyes Closed",
     exerciseGroup: "Balance"
   },
   {
     question: "Calf Raise Test",
-    desc: "Record your results below",
+    desc: "Record your results below (in seconds)",
     eachSide: true,
     eachSideMessage: "Each Leg",
     bothSidesTogether: true,
@@ -145,6 +149,7 @@ const Quiz: React.FC<QuizProps> = () => {
         setQuizComplete(true)
       }
       setShowResults(true)
+      postAnswers()
     }
   }
 
@@ -319,6 +324,185 @@ const Quiz: React.FC<QuizProps> = () => {
     setEditMode(false) // Cancel editing and revert changes
   }
 
+  // const postAnswers = async () => {
+  // Create the payload with answers and any other required data
+  // const quizData = {
+  //   clientInfo: clientInfo,
+  //   // Ensure you have client information like name, email, etc.
+  //   // Assume answers are gathered from the respective quiz questions
+  //   ankle_mobility_right_ins: answers[0][0], // Adjust the index based on question order
+  //   ankle_mobility_left_ins: answers[0][1], // Adjust the index based on question order
+  //   knee_strength_together_secs: answers[1][0], // Adjust the index based on question order
+  //   knee_strength_right_secs: answers[2][0], // Adjust the index based on question order
+  //   knee_strength_left_secs: answers[2][1], // Adjust the index based on question order
+  //   glute_med_strength_V1_right_secs: answers[3][0], // Adjust the index based on question order
+  //   glute_med_strength_V1_left_secs: answers[3][1], // Adjust the index based on question order
+  //   glute_med_strength_V2_right_secs: answers[4][0], // Adjust the index based on question order
+  //   glute_med_strength_V2_left_secs: answers[4][1], // Adjust the index based on question order
+  //   hamstring_strength_right_reps: answers[5][0], // Adjust the index based on question order
+  //   hamstring_strength_left_reps: answers[5][1], // Adjust the index based on question order
+  //   glute_max_strength_right_reps: answers[6][0], // Adjust the index based on question order
+  //   glute_max_strength_left_reps: answers[6][1], // Adjust the index based on question order
+  //   balance_eyes_open_right_secs: answers[7][0], // Adjust the index based on question order
+  //   balance_eyes_open_left_secs: answers[7][1], // Adjust the index based on question order
+  //   balance_eyes_closed_right_secs: answers[8][0], // Adjust the index based on question order
+  //   balance_eyes_closed_left_secs: answers[8][1], // Adjust the index based on question order
+  //   calf_strength_together_reps: answers[9][0], // Adjust the index based on question order
+  //   calf_strength_right_reps: answers[9][1], // Adjust the index based on question order
+  //   calf_strength_left_reps: answers[9][2], // Adjust the index based on question order
+  //   test_no: 1 // Replace with your test number logic
+  // }
+
+  // try {
+  //   const response = await fetch("http://localhost:3003/store-exercise-data", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json" // Make sure the server accepts JSON
+  //     },
+  //     body: JSON.stringify(quizData) // Send the quiz data as JSON
+  //   })
+
+  //   if (response.ok) {
+  //     console.log("Quiz data successfully stored!")
+  //     // Handle success (e.g., show a success message)
+  //   } else {
+  //     console.error("Failed to store quiz data:", response)
+  //     // Handle failure (e.g., show an error message)
+  //   }
+  // } catch (error) {
+  //   console.error("Error submitting quiz data:", error)
+  //   // Handle error (e.g., show an error message)
+  // }
+  //   try {
+  //     const formattedAnswers = answers.map((answer, index) => ({
+  //       questionId: index + 1, // Use a sequential ID or your existing ID logic
+  //       answer: answer // Assuming each item in `answers` is the answer value
+  //     }))
+  //     const response = await axios.post("http://localhost:3003/store-exercise-data", {
+  //       clientInfo: clientInfo ? {
+  //         name: clientInfo.name,
+  //         email: clientInfo.email,
+  //         workouts_per_week: clientInfo.workoutsPerWeek // Mapping `workoutsPerWeek` to `workouts_per_week`
+  //       } : null,
+  //       answers: formattedAnswers // Only sending answers
+  //       // Only sending client information
+  //     })
+  //     console.log("Formatted payload for POST:", payload)
+  //     console.log("Response from server:", response.data)
+  //   } catch (error) {
+  //     console.error("Error posting answers:", error)
+  //   }
+  // }
+  const postAnswers = async () => {
+    try {
+      // // Format answers as needed
+      // const formattedAnswers = answers.map((answer, index) => ({
+      //   questionId: index + 1, // or use actual question ID
+      //   answer: answer
+      // }))
+      // --- Ankle Mobility (2 Questions) ---
+      const ankleMobilityTestIndex = 0 // 2 questions: Right and Left mobility
+      const ankleMobilityAnswers = [
+        answers[ankleMobilityTestIndex][0], // Right mobility
+        answers[ankleMobilityTestIndex][1] // Left mobility
+      ]
+      const validAnkleMobilityAnswers = ankleMobilityAnswers.filter((val) => val !== null)
+      console.log(validAnkleMobilityAnswers)
+      // --- Knee Strength (3 Questions) ---
+      const kneeStrengthTestIndex = 1 // 3 questions: Together, Right, Left seconds
+      const kneeStrengthAnswers = [
+        answers[kneeStrengthTestIndex][0], // Together seconds
+        answers[kneeStrengthTestIndex][1], // Right seconds
+        answers[kneeStrengthTestIndex][2] // Left seconds
+      ]
+      const validKneeStrengthAnswers = kneeStrengthAnswers.filter((val) => val !== null)
+      console.log(validKneeStrengthAnswers)
+      // --- Gluteus Medius Strength (4 Questions) ---
+      const gluteMedStrengthTestIndex = 2 // 4 questions: Right V1, Left V1, Right V2, Left V2 seconds
+      const gluteMedStrengthAnswers = [
+        answers[gluteMedStrengthTestIndex][0], // Right V1 seconds
+        answers[gluteMedStrengthTestIndex][1], // Left V1 seconds
+        answers[gluteMedStrengthTestIndex][2], // Right V2 seconds
+        answers[gluteMedStrengthTestIndex][3] // Left V2 seconds
+      ]
+      const validGluteMedStrengthAnswers = gluteMedStrengthAnswers.filter((val) => val !== null)
+      console.log(validGluteMedStrengthAnswers)
+      // --- Hamstring Strength (2 Questions) ---
+      const hamstringStrengthTestIndex = 3 // 2 questions: Right reps, Left reps
+      const hamstringStrengthAnswers = [
+        answers[hamstringStrengthTestIndex][0], // Right reps
+        answers[hamstringStrengthTestIndex][1] // Left reps
+      ]
+      const validHamstringStrengthAnswers = hamstringStrengthAnswers.filter((val) => val !== null)
+      console.log(validHamstringStrengthAnswers)
+      // --- Gluteus Maximus Strength (2 Questions) ---
+      const gluteMaxStrengthTestIndex = 4 // 2 questions: Right reps, Left reps
+      const gluteMaxStrengthAnswers = [
+        answers[gluteMaxStrengthTestIndex][0], // Right reps
+        answers[gluteMaxStrengthTestIndex][1] // Left reps
+      ]
+      const validGluteMaxStrengthAnswers = gluteMaxStrengthAnswers.filter((val) => val !== null)
+      console.log(validGluteMaxStrengthAnswers)
+      // --- Balance (4 Questions) ---
+      const balanceTestIndex = 5 // 4 questions: Eyes open right, Eyes open left, Eyes closed right, Eyes closed left
+      const balanceAnswers = [
+        answers[balanceTestIndex][0], // Eyes open right seconds
+        answers[balanceTestIndex][1], // Eyes open left seconds
+        answers[balanceTestIndex][2], // Eyes closed right seconds
+        answers[balanceTestIndex][3] // Eyes closed left seconds
+      ]
+      const validBalanceAnswers = balanceAnswers.filter((val) => val !== null)
+      console.log(validBalanceAnswers)
+      // --- Calf Strength (3 Questions) ---
+      const calfStrengthTestIndex = 6 // 3 questions: Together reps, Right reps, Left reps
+      const calfStrengthAnswers = [
+        answers[calfStrengthTestIndex][0], // Together reps
+        answers[calfStrengthTestIndex][1], // Right reps
+        answers[calfStrengthTestIndex][2] // Left reps
+      ]
+      const validCalfStrengthAnswers = calfStrengthAnswers.filter((val) => val !== null)
+      console.log(validCalfStrengthAnswers)
+      // Prepare the payload with a check for clientInfo being null
+      const payload = {
+        name: clientInfo?.name,
+        email: clientInfo?.email,
+        workouts_per_week: clientInfo?.workoutsPerWeek,
+        ankle_mobility_right_ins: validAnkleMobilityAnswers[0], // Right mobility
+        ankle_mobility_left_ins: validAnkleMobilityAnswers[1], // Left mobility
+        knee_strength_together_secs: validKneeStrengthAnswers[0], // Together seconds
+        knee_strength_right_secs: validKneeStrengthAnswers[1], // Right seconds
+        knee_strength_left_secs: validKneeStrengthAnswers[2], // Left seconds
+        glute_med_strength_V1_right_secs: validGluteMedStrengthAnswers[0], // Right V1 seconds
+        glute_med_strength_V1_left_secs: validGluteMedStrengthAnswers[1], // Left V1 seconds
+        glute_med_strength_V2_right_secs: validGluteMedStrengthAnswers[2], // Right V2 seconds
+        glute_med_strength_V2_left_secs: validGluteMedStrengthAnswers[3], // Left V2 seconds
+        hamstring_strength_right_reps: validHamstringStrengthAnswers[0], // Right reps
+        hamstring_strength_left_reps: validHamstringStrengthAnswers[1], // Left reps
+        glute_max_strength_right_reps: validGluteMaxStrengthAnswers[0], // Right reps
+        glute_max_strength_left_reps: validGluteMaxStrengthAnswers[1], // Left reps
+        balance_eyes_open_right_secs: validBalanceAnswers[0], // Eyes open right seconds
+        balance_eyes_open_left_secs: validBalanceAnswers[1], // Eyes open left seconds
+        balance_eyes_closed_right_secs: validBalanceAnswers[2], // Eyes closed right seconds
+        balance_eyes_closed_left_secs: validBalanceAnswers[3], // Eyes closed left seconds
+        calf_strength_together_reps: validCalfStrengthAnswers[0], // Together reps
+        calf_strength_right_reps: validCalfStrengthAnswers[1], // Right reps
+        calf_strength_left_reps: validCalfStrengthAnswers[2], // Left reps
+        test_no: 1 // Add test number or any other metadata
+      }
+
+      console.log("Formatted payload for POST:", payload)
+
+      const response = await axios.post("http://localhost:3003/store-exercise-data", payload)
+      console.log("Successfully posted answers:", response.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error posting answers:", error.response || error.message)
+      } else {
+        console.error("Error posting answers:", error)
+      }
+    }
+  }
+
   return (
     <Container>
       {!clientInfo || editMode ? (
@@ -356,10 +540,11 @@ const Quiz: React.FC<QuizProps> = () => {
               bothSidesTogether={questions[currentQuestion].bothSidesTogether}
               bothSidesTogetherMessage={questions[currentQuestion].bothSidesTogetherMessage}
               numberOfEachSide={questions[currentQuestion].numberOfEachSide}
-              numberOfEachSideMessage={questions[currentQuestion].numberOfEachSideMessage}
               exerciseGroup={questions[currentQuestion].exerciseGroup}
               answer={answers[currentQuestion]}
               onAnswerChange={handleAnswerChange}
+              messageOne={questions[currentQuestion].messageOne}
+              messageTwo={questions[currentQuestion].messageTwo}
             />
             <button className='submit-btn mx-auto' onClick={handleNextClick}>
               {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
