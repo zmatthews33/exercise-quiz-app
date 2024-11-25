@@ -324,82 +324,8 @@ const Quiz: React.FC<QuizProps> = () => {
     setEditMode(false) // Cancel editing and revert changes
   }
 
-  // const postAnswers = async () => {
-  // Create the payload with answers and any other required data
-  // const quizData = {
-  //   clientInfo: clientInfo,
-  //   // Ensure you have client information like name, email, etc.
-  //   // Assume answers are gathered from the respective quiz questions
-  //   ankle_mobility_right_ins: answers[0][0], // Adjust the index based on question order
-  //   ankle_mobility_left_ins: answers[0][1], // Adjust the index based on question order
-  //   knee_strength_together_secs: answers[1][0], // Adjust the index based on question order
-  //   knee_strength_right_secs: answers[2][0], // Adjust the index based on question order
-  //   knee_strength_left_secs: answers[2][1], // Adjust the index based on question order
-  //   glute_med_strength_V1_right_secs: answers[3][0], // Adjust the index based on question order
-  //   glute_med_strength_V1_left_secs: answers[3][1], // Adjust the index based on question order
-  //   glute_med_strength_V2_right_secs: answers[4][0], // Adjust the index based on question order
-  //   glute_med_strength_V2_left_secs: answers[4][1], // Adjust the index based on question order
-  //   hamstring_strength_right_reps: answers[5][0], // Adjust the index based on question order
-  //   hamstring_strength_left_reps: answers[5][1], // Adjust the index based on question order
-  //   glute_max_strength_right_reps: answers[6][0], // Adjust the index based on question order
-  //   glute_max_strength_left_reps: answers[6][1], // Adjust the index based on question order
-  //   balance_eyes_open_right_secs: answers[7][0], // Adjust the index based on question order
-  //   balance_eyes_open_left_secs: answers[7][1], // Adjust the index based on question order
-  //   balance_eyes_closed_right_secs: answers[8][0], // Adjust the index based on question order
-  //   balance_eyes_closed_left_secs: answers[8][1], // Adjust the index based on question order
-  //   calf_strength_together_reps: answers[9][0], // Adjust the index based on question order
-  //   calf_strength_right_reps: answers[9][1], // Adjust the index based on question order
-  //   calf_strength_left_reps: answers[9][2], // Adjust the index based on question order
-  //   test_no: 1 // Replace with your test number logic
-  // }
-
-  // try {
-  //   const response = await fetch("http://localhost:3003/store-exercise-data", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json" // Make sure the server accepts JSON
-  //     },
-  //     body: JSON.stringify(quizData) // Send the quiz data as JSON
-  //   })
-
-  //   if (response.ok) {
-  //     console.log("Quiz data successfully stored!")
-  //     // Handle success (e.g., show a success message)
-  //   } else {
-  //     console.error("Failed to store quiz data:", response)
-  //     // Handle failure (e.g., show an error message)
-  //   }
-  // } catch (error) {
-  //   console.error("Error submitting quiz data:", error)
-  //   // Handle error (e.g., show an error message)
-  // }
-  //   try {
-  //     const formattedAnswers = answers.map((answer, index) => ({
-  //       questionId: index + 1, // Use a sequential ID or your existing ID logic
-  //       answer: answer // Assuming each item in `answers` is the answer value
-  //     }))
-  //     const response = await axios.post("http://localhost:3003/store-exercise-data", {
-  //       clientInfo: clientInfo ? {
-  //         name: clientInfo.name,
-  //         email: clientInfo.email,
-  //         workouts_per_week: clientInfo.workoutsPerWeek // Mapping `workoutsPerWeek` to `workouts_per_week`
-  //       } : null,
-  //       answers: formattedAnswers // Only sending answers
-  //       // Only sending client information
-  //     })
-  //     console.log("Formatted payload for POST:", payload)
-  //     console.log("Response from server:", response.data)
-  //   } catch (error) {
-  //     console.error("Error posting answers:", error)
-  //   }
-  // }
   const postAnswers = async () => {
     try {
-      // // Format answers as needed
-      // const formattedAnswers = answers.map((answer, index) => ({
-      //   questionId: index + 1, // or use actual question ID
-      //   answer: answer
-      // }))
       // --- Ankle Mobility (2 Questions) ---
       const ankleMobilityTestIndex = 0 // 2 questions: Right and Left mobility
       const ankleMobilityAnswers = [
