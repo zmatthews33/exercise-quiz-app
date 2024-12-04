@@ -155,3 +155,17 @@ button:focus-visible {
   height: 3rem;
   border-radius: 4px;
 }
+
+.lookup-btn {
+  background-color: #f9f9f9;
+  color: #81a0ad;
+  border-color: #7d99a5;
+  &:hover {
+    color: #f9f9f9;
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+}

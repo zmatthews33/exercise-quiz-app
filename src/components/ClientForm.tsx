@@ -1,11 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Container, FormLabel } from "react-bootstrap"
 import { TextField, Select, MenuItem, Button } from "@mui/material"
 
 export interface ClientInfo {
   name: string
   email: string
-  workoutsPerWeek: number | string
+  workoutsPerWeek: number
 }
 
 interface MonthlyExercises {
@@ -19,18 +19,26 @@ interface ClientWithMonthlyExercises extends ClientInfo, MonthlyExercises {
 }
 
 interface ClientFormProps {
-  initialInfo: ClientInfo | null
+  initialInfo?: ClientInfo | null
   onSubmit: (info: { name: string; email: string; workoutsPerWeek: number }) => void
 }
 
-const ClientForm: React.FC<ClientFormProps> = ({ onSubmit }) => {
+const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
   const [mode, setMode] = useState<"new" | "lookup" | null>(null)
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [workoutsPerWeek, setWorkoutsPerWeek] = useState(2)
+  const [name, setName] = useState(initialInfo?.name || "")
+  const [email, setEmail] = useState(initialInfo?.email || "")
+  const [workoutsPerWeek, setWorkoutsPerWeek] = useState(initialInfo?.workoutsPerWeek || 2)
   const [lookupEmail, setLookupEmail] = useState("")
   const [lookupResult, setLookupResult] = useState<ClientWithMonthlyExercises[]>([])
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (initialInfo) {
+      setName(initialInfo.name)
+      setEmail(initialInfo.email)
+      setWorkoutsPerWeek(parseInt(String(initialInfo.workoutsPerWeek)))
+    }
+  }, [initialInfo])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,16 +85,15 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit }) => {
   return (
     <Container>
       {!mode && (
-        <div className='button-group'>
-          <button className='submit-btn mx-auto mt-4 mb-4' type='submit'>
-            Save
+        <div className='button-group mx-auto'>
+          <button onClick={() => setMode("new")} className='mx-2'>
+            New Client
           </button>
-          <Button variant='outlined' color='secondary' onClick={() => setMode("lookup")} className='mx-2'>
+          <button color='secondary' onClick={() => setMode("lookup")} className='lookup-btn mx-2'>
             Lookup Existing
-          </Button>
+          </button>
         </div>
       )}
-
       {/* New Client Form */}
       {mode === "new" && (
         <form className='client-form' onSubmit={handleSubmit}>
@@ -132,7 +139,6 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit }) => {
           </button>
         </form>
       )}
-
       {/* Lookup Existing Form */}
       {mode === "lookup" && (
         <div className='lookup-form'>

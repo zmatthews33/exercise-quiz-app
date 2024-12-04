@@ -454,9 +454,9 @@ const Quiz: React.FC<QuizProps> = () => {
             <p>Email: {clientInfo.email}</p>
             <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
 
-            <button className='edit-button' onClick={handleEditClick}>
+            {/* <button className='edit-button' onClick={handleEditClick}>
               Edit
-            </button>
+            </button> */}
           </div>
           <div className='questions-div'>
             <Question
