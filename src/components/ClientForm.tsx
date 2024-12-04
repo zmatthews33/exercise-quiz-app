@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Container, FormLabel } from "react-bootstrap"
-import { TextField, Select, MenuItem, Button } from "@mui/material"
+import { TextField, Select, MenuItem } from "@mui/material"
 
 export interface ClientInfo {
   name: string
@@ -49,10 +49,16 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
   const handleLookup = async () => {
     setError(null)
     setLookupResult([])
+    // Check if the email field is empty
+    if (!lookupEmail.trim()) {
+      setError("Please enter a valid email address.")
+      return
+    }
+
     try {
       const response = await fetch(`http://localhost:3003/store-exercise-plan?email=${lookupEmail}`)
       if (!response.ok) {
-        throw new Error(`Client with email "${lookupEmail}" not found.`)
+        throw new Error(`Client with email ${lookupEmail} not found.`)
       }
       const data = await response.json()
       console.log("Fetched Data:", data)
@@ -79,7 +85,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString() // Customize date format if needed
+    return date.toLocaleDateString()
   }
 
   return (
@@ -94,6 +100,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
           </button>
         </div>
       )}
+
       {/* New Client Form */}
       {mode === "new" && (
         <form className='client-form' onSubmit={handleSubmit}>
@@ -137,75 +144,86 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
           <button className='submit-btn mx-auto mt-4 mb-4' type='submit'>
             Save
           </button>
+          <button
+            onClick={() => setMode(null)} // Reset mode to null
+            className='back-btn mx-auto mt-2 mb-4'
+          >
+            Back
+          </button>
         </form>
       )}
       {/* Lookup Existing Form */}
       {mode === "lookup" && (
-        <div className='lookup-form'>
-          <FormLabel className='form-label' htmlFor='lookupEmail'>
-            Enter Email to Lookup:
-          </FormLabel>
-          <TextField
-            id='lookupEmail'
-            className='form-control mb-2'
-            value={lookupEmail}
-            onChange={(e) => setLookupEmail(e.target.value)}
-            required
-            type='email'
-          />
-          <Button variant='contained' color='primary' onClick={handleLookup} className='mt-3'>
-            Lookup
-          </Button>
-          {error && <p className='text-danger mt-3'>{error}</p>}
-
+        <Container className='lookup-container'>
+          <div className='lookup-form client-form'>
+            <FormLabel className='form-label' htmlFor='lookupEmail'>
+              Enter Email to Lookup:
+            </FormLabel>
+            <TextField
+              id='lookupEmail'
+              className='form-control mb-2'
+              value={lookupEmail}
+              onChange={(e) => setLookupEmail(e.target.value)}
+              required
+              type='email'
+            />
+            <button onClick={handleLookup} className='submit-btn mx-auto mt-4 mb-4'>
+              Lookup
+            </button>
+            <button
+              onClick={() => setMode(null)} // Reset mode to null
+              className='back-btn mx-auto mt-2 mb-4'
+            >
+              Back
+            </button>
+            {error && <p className='text-danger mt-3'>{error}</p>}
+          </div>
           {/* Displaying results in a table */}
           {lookupResult.length > 0 && (
-            <table className='table table-bordered mt-4'>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Workouts Per Week</th>
-                  <th>Month 1 Exercises</th>
-                  <th>Month 2 Exercises</th>
-                  <th>Month 3 Exercises</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lookupResult.map((client, index) => (
-                  <tr key={index}>
-                    <td>{client.name}</td>
-                    <td>{client.email}</td>
-                    <td>{formatDate(client.created_at)}</td>
-                    <td>{client.workoutsPerWeek}</td>
-                    <td>
-                      <ul>
-                        {client.month1_exercises.map((exercise, idx) => (
-                          <li key={idx}>{exercise}</li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td>
-                      <ul>
-                        {client.month2_exercises.map((exercise, idx) => (
-                          <li key={idx}>{exercise}</li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td>
-                      <ul>
-                        {client.month3_exercises.map((exercise, idx) => (
-                          <li key={idx}>{exercise}</li>
-                        ))}
-                      </ul>
-                    </td>
+            <Container>
+              <table className='table table-bordered mt-4'>
+                <thead>
+                  <tr>
+                    <th>Workouts Per Week</th>
+                    <th>Month 1 Exercises</th>
+                    <th>Month 2 Exercises</th>
+                    <th>Month 3 Exercises</th>
+                    <th>Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {lookupResult.map((client, index) => (
+                    <tr key={index}>
+                      <td>{formatDate(client.created_at)}</td>
+                      <td>{client.workoutsPerWeek}</td>
+                      <td>
+                        <ul>
+                          {client.month1_exercises.map((exercise, idx) => (
+                            <li key={idx}>{exercise}</li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>
+                        <ul>
+                          {client.month2_exercises.map((exercise, idx) => (
+                            <li key={idx}>{exercise}</li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>
+                        <ul>
+                          {client.month3_exercises.map((exercise, idx) => (
+                            <li key={idx}>{exercise}</li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Container>
           )}
-        </div>
+        </Container>
       )}
     </Container>
   )

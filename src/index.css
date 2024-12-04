@@ -164,7 +164,12 @@ button:focus-visible {
     color: #f9f9f9;
   }
 }
-
+.lookup-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
 .button-group {
   display: flex;
   justify-content: center;

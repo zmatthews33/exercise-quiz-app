@@ -430,6 +430,22 @@ const Quiz: React.FC<QuizProps> = () => {
     }
   }
 
+  const onRestart = () => {
+    setCurrentQuestion(0)
+    setAnswers(initializeAnswers(questions))
+    setShowResults(false)
+    setQuizComplete(false)
+    setAnkleTestFail(false)
+    setCalfTestFail(false)
+    setKneeExerciseNo(null)
+    setGluteMedExerciseNo(null)
+    setHamstringExerciseNo(null)
+    setGluteMaxExerciseNo(null)
+    setBalanceExerciseNo(null)
+    setClientInfo(null)
+    setEditMode(false)
+  }
+
   return (
     <Container>
       {!clientInfo || editMode ? (
@@ -453,10 +469,6 @@ const Quiz: React.FC<QuizProps> = () => {
             <p>Name: {clientInfo.name}</p>
             <p>Email: {clientInfo.email}</p>
             <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
-
-            {/* <button className='edit-button' onClick={handleEditClick}>
-              Edit
-            </button> */}
           </div>
           <div className='questions-div'>
             <Question
@@ -485,6 +497,9 @@ const Quiz: React.FC<QuizProps> = () => {
         </Container>
       ) : (
         <>
+          <div className='text-center mt-4'>
+            <button onClick={onRestart}>Start Over</button>
+          </div>
           <div className='client-info-div'>
             <h2>Client Information:</h2>
             <p>Name: {clientInfo.name}</p>
