@@ -14,6 +14,7 @@ import { masterExerciseList } from "../data/exerciseList"
 type QuizProps = {
   setQuizComplete: (quizComplete: boolean) => void
 }
+
 export interface ClientInfo {
   name: string
   email: string

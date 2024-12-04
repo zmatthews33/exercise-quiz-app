@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import axios from "axios"
 
 // components
 import { Exercise } from "../components/Quiz"
@@ -62,6 +63,32 @@ const Results: React.FC<ResultsProps> = ({
       score: number
     }[]
   >([])
+  const postResults = async () => {
+    try {
+      const payload = {
+        name: clientInfo.name,
+        email: clientInfo.email,
+        workouts_per_week: clientInfo.workoutsPerWeek,
+        month1_exercises: month1Exercises.flat().map((ex) => ex.Exercise),
+        month2_exercises: month2Exercises.flat().map((ex) => ex.Exercise),
+        month3_exercises: month3Exercises.flat().map((ex) => ex.Exercise),
+        test_no: 1
+      }
+
+      // Replace `API_ENDPOINT` with your endpoint URL
+      const response = await axios.post("http://localhost:3003/store-exercise-plan", payload)
+      console.log("Data posted successfully:", response.data)
+    } catch (error) {
+      console.error("Error posting data:", error)
+    }
+  }
+  // Call postResults when exercises are available
+  useEffect(() => {
+    // Ensure that all months' exercises are available before posting the results
+    if (month1Exercises.length > 0 && month2Exercises.length > 0) {
+      postResults() // Post results when conditions are met
+    }
+  }, [month1Exercises, month2Exercises, month3Exercises])
 
   useEffect(() => {
     if (path) {
