@@ -184,11 +184,11 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
               <table className='table table-bordered mt-4'>
                 <thead>
                   <tr>
+                    <th>Date</th>
                     <th>Workouts Per Week</th>
                     <th>Month 1 Exercises</th>
                     <th>Month 2 Exercises</th>
                     <th>Month 3 Exercises</th>
-                    <th>Date</th>
                   </tr>
                 </thead>
                 <tbody>

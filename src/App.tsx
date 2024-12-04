@@ -13,6 +13,13 @@ const App: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
   }
+  const currentYear = new Date().getFullYear()
+
+  const copyrightYearElement = document.getElementById("current-year")
+
+  if (copyrightYearElement) {
+    copyrightYearElement.textContent = currentYear.toString()
+  }
 
   const handlePasswordSubmit = () => {
     const correctPassword = "0kM4LWLeiozqGd" // Replace with your actual password
@@ -43,7 +50,9 @@ const App: React.FC = () => {
       </header>
       <Quiz setQuizComplete={setQuizComplete} />
       <div className='text-center mt-4'>
-        <p>Copyright ©2024 Chelsea Matthews Coaching®</p>
+        <p>
+          Copyright © <span id='current-year'>{currentYear}</span> Chelsea Matthews Coaching®
+        </p>
         <h5>*** NOTICE: UNAUTHORIZED ACCESS OR USE WILL BE PROSECUTED ***</h5>
       </div>
     </Container>
