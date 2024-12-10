@@ -419,7 +419,7 @@ const Quiz: React.FC<QuizProps> = () => {
 
       console.log("Formatted payload for POST:", payload)
 
-      const response = await axios.post("http://localhost:3003/store-exercise-data", payload)
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/store-exercise-data`, payload)
       console.log("Successfully posted answers:", response.data)
     } catch (error) {
       if (axios.isAxiosError(error)) {

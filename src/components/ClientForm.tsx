@@ -56,7 +56,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3003/store-exercise-plan?email=${lookupEmail}`)
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/store-exercise-plan?email=${lookupEmail}`)
       if (!response.ok) {
         throw new Error(`Client with email ${lookupEmail} not found.`)
       }

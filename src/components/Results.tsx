@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 
@@ -19,8 +20,6 @@ import {
 } from "@mui/material"
 import { Container } from "react-bootstrap"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-
-// data
 import { masterExerciseList } from "../data/exerciseList"
 import exercisePaths from "../data/exercisePaths"
 
@@ -63,30 +62,54 @@ const Results: React.FC<ResultsProps> = ({
       score: number
     }[]
   >([])
+
   const postResults = async () => {
+    const formatExercisesByWeek = (monthExercises: Exercise[][]): { Workout: number; Exercises: any[] }[] =>
+      monthExercises.map((week: Exercise[], index: number) => ({
+        Workout: index + 1,
+        Exercises: week.map((ex: Exercise) => ({
+          Category: ex.Category,
+          Exercise: ex.Exercise,
+          Sets: ex.Sets,
+          Reps: ex.Reps,
+          Hold: ex.Hold,
+          Rest: ex.Rest,
+          Notes: ex.Notes,
+          Link: ex.Link
+        }))
+      }))
+
+    const formattedMonth1 = formatExercisesByWeek(month1Exercises)
+    const formattedMonth2 = formatExercisesByWeek(month2Exercises)
+    const formattedMonth3 = formatExercisesByWeek(month3Exercises)
+    console.log("Storing payload:", {
+      name: clientInfo.name,
+      email: clientInfo.email,
+      workouts_per_week: clientInfo.workoutsPerWeek,
+      month1_exercises: formattedMonth1,
+      month2_exercises: formattedMonth2,
+      month3_exercises: formattedMonth3
+    })
     try {
       const payload = {
         name: clientInfo.name,
         email: clientInfo.email,
         workouts_per_week: clientInfo.workoutsPerWeek,
-        month1_exercises: month1Exercises.flat().map((ex) => ex.Exercise),
-        month2_exercises: month2Exercises.flat().map((ex) => ex.Exercise),
-        month3_exercises: month3Exercises.flat().map((ex) => ex.Exercise),
-        test_no: 1
+        month1_exercises: formattedMonth1,
+        month2_exercises: formattedMonth2,
+        month3_exercises: formattedMonth3
       }
 
-      // Replace `API_ENDPOINT` with your endpoint URL
-      const response = await axios.post("http://localhost:3003/store-exercise-plan", payload)
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/store-exercise-plan`, payload)
       console.log("Data posted successfully:", response.data)
     } catch (error) {
       console.error("Error posting data:", error)
     }
   }
-  // Call postResults when exercises are available
+
   useEffect(() => {
-    // Ensure that all months' exercises are available before posting the results
-    if (month1Exercises.length > 0 && month2Exercises.length > 0) {
-      postResults() // Post results when conditions are met
+    if (month1Exercises.length > 0 && month2Exercises.length > 0 && month3Exercises.length > 0) {
+      postResults()
     }
   }, [month1Exercises, month2Exercises, month3Exercises])
 
@@ -101,41 +124,14 @@ const Results: React.FC<ResultsProps> = ({
         categories.forEach((category) => {
           if (category in masterExerciseList) {
             const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
-            if (category === "Foot Strength") {
-              const footStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (footStrengthExercise) {
-                filteredExercises.push(footStrengthExercise)
-              }
-            } else if (category === "Knee Strength Isometrics") {
-              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (calfStrengthExercise) {
-                filteredExercises.push(calfStrengthExercise)
-              }
-            } else if (category === "Calf Strength") {
-              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (calfStrengthExercise) {
-                filteredExercises.push(calfStrengthExercise)
-              }
-            } else if (category === "Ankle Mobility") {
-              const ankleMobilityExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (ankleMobilityExercise) {
-                filteredExercises.push(ankleMobilityExercise)
-              }
-            } else if (category === "Front Planks") {
-              const frontPlankExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (frontPlankExercise) {
-                filteredExercises.push(frontPlankExercise)
+            const exerciseNo = exerciseNumbers[category]
+            if (exerciseNo !== null) {
+              const exercise = exercises.find((ex) => ex.ExerciseNo === exerciseNo)
+              if (exercise) {
+                filteredExercises.push(exercise)
               }
             } else {
-              const exerciseNo = exerciseNumbers[category]
-              if (exerciseNo !== null) {
-                const exercise = exercises.find((ex) => ex.ExerciseNo === exerciseNo)
-                if (exercise) {
-                  filteredExercises.push(exercise)
-                }
-              } else {
-                exercises.forEach((ex) => filteredExercises.push(ex))
-              }
+              exercises.forEach((ex) => filteredExercises.push(ex))
             }
           }
         })
@@ -143,8 +139,8 @@ const Results: React.FC<ResultsProps> = ({
       }
 
       const exerciseNumbers = {
-        "Calf Strength": calfTestFail === true ? 1 : null,
-        "Ankle Mobility": ankleTestFail === true ? 1 : null,
+        "Calf Strength": calfTestFail ? 1 : null,
+        "Ankle Mobility": ankleTestFail ? 1 : null,
         "Knee Strength": kneeExerciseNo,
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
@@ -152,15 +148,14 @@ const Results: React.FC<ResultsProps> = ({
         Balance: balanceExerciseNo
       }
 
-      const week1ExercisesFiltered = filterExercises(categoriesWeek1, exerciseNumbers)
-      const week2ExercisesFiltered = filterExercises(categoriesWeek2, exerciseNumbers)
-      const week3ExercisesFiltered =
-        clientInfo.workoutsPerWeek === 3 ? filterExercises(categoriesWeek3, exerciseNumbers) : []
+      const week1Exercises = filterExercises(categoriesWeek1, exerciseNumbers)
+      const week2Exercises = filterExercises(categoriesWeek2, exerciseNumbers)
+      const week3Exercises = clientInfo.workoutsPerWeek === 3 ? filterExercises(categoriesWeek3, exerciseNumbers) : []
 
       const allWeeks =
         clientInfo.workoutsPerWeek === 3
-          ? [week1ExercisesFiltered, week2ExercisesFiltered, week3ExercisesFiltered]
-          : [week1ExercisesFiltered, week2ExercisesFiltered]
+          ? [week1Exercises, week2Exercises, week3Exercises]
+          : [week1Exercises, week2Exercises]
 
       setMonth1Exercises(allWeeks)
       setMonth2Exercises(
@@ -182,8 +177,7 @@ const Results: React.FC<ResultsProps> = ({
         )
       )
 
-      // Collect all exercises to determine the scores
-      const allExercises = [...week1ExercisesFiltered, ...week2ExercisesFiltered, ...week3ExercisesFiltered]
+      const allExercises = [...week1Exercises, ...week2Exercises, ...week3Exercises]
       const scores: { category: string; score: number }[] = []
       allExercises.forEach((exercise) => {
         if (!scores.find((score) => score.category === exercise.Category)) {
@@ -203,43 +197,19 @@ const Results: React.FC<ResultsProps> = ({
     ankleTestFail
   ])
 
-  if (!path) {
-    console.error("No workout path found for the given test results and workout frequency.")
-    return null
-  }
-
   const renderExercisesScores = (scores: { category: string; score: number }[]) => (
     <div className='mb-4'>
-      <Accordion className='accordion'>
+      <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant='h5'>Expand Results</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <strong>
-            <p>Path: {path.Path}</p>
-          </strong>
-          <strong>
-            <p>
-              Ankle Test:
-              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
-            </p>
-          </strong>
-          <strong>
-            <p>
-              Calf Test:{" "}
-              <span className={calfTestFail ? "fail-color" : "pass-color"}> {calfTestFail ? "FAIL" : "PASS"}</span>
-            </p>
-          </strong>
           <TableContainer component={Paper}>
-            <Table style={{ tableLayout: "fixed" }}>
+            <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>
-                    <strong>Category</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Score</strong>
-                  </TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Score</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -259,39 +229,23 @@ const Results: React.FC<ResultsProps> = ({
 
   const renderExercisesTable = (exercises: Exercise[], week: number) => (
     <div className='mb-4'>
-      <Accordion className='accordion'>
+      <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography variant='h5'>Workout {week}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <TableContainer component={Paper}>
-            <Table style={{ tableLayout: "fixed" }}>
+            <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>
-                    <strong>Category</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Exercise</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Sets</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Reps</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Hold (secs)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Rest (mins)</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Notes</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Link</strong>
-                  </TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Exercise</TableCell>
+                  <TableCell>Sets</TableCell>
+                  <TableCell>Reps</TableCell>
+                  <TableCell>Hold (secs)</TableCell>
+                  <TableCell>Rest (mins)</TableCell>
+                  <TableCell>Notes</TableCell>
+                  <TableCell>Link</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -305,7 +259,9 @@ const Results: React.FC<ResultsProps> = ({
                     <TableCell>{exercise.Rest}</TableCell>
                     <TableCell>{exercise.Notes}</TableCell>
                     <TableCell>
-                      <a href={exercise.Link}>Link</a>
+                      <a href={exercise.Link} target='_blank' rel='noopener noreferrer'>
+                        Link
+                      </a>
                     </TableCell>
                   </TableRow>
                 ))}
