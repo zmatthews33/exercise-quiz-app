@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+
+// components
 import { Container, FormLabel } from "react-bootstrap"
 import { TextField, Select, MenuItem } from "@mui/material"
 
@@ -8,10 +10,24 @@ export interface ClientInfo {
   workoutsPerWeek: number
 }
 
+interface WorkoutData {
+  Workout: number
+  Exercises: {
+    Category: string
+    Exercise: string
+    Sets: string
+    Reps: string
+    Hold: string
+    Rest: string
+    Notes: string
+    Link: string
+  }[]
+}
+
 interface MonthlyExercises {
-  month1_exercises: string[]
-  month2_exercises: string[]
-  month3_exercises: string[]
+  month1_exercises: WorkoutData[]
+  month2_exercises: WorkoutData[]
+  month3_exercises: WorkoutData[]
 }
 
 interface ClientWithMonthlyExercises extends ClientInfo, MonthlyExercises {
@@ -45,11 +61,9 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
     onSubmit({ name, email, workoutsPerWeek })
   }
 
-  // Handle the result from the backend
   const handleLookup = async () => {
     setError(null)
     setLookupResult([])
-    // Check if the email field is empty
     if (!lookupEmail.trim()) {
       setError("Please enter a valid email address.")
       return
@@ -62,13 +76,8 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
       }
       const data = await response.json()
       console.log("Fetched Data:", data)
-      if (data && data.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data.forEach((client: any) => {
-          console.log("Client workoutsPerWeek:", client.workoutsPerWeek) // Log each client's workoutsPerWeek
-        })
-      }
-      // Parsing the month exercises and setting state
+
+      // Parse exercises from JSON strings
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const parsedResult = data.map((client: any) => ({
         ...client,
@@ -77,6 +86,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
         month2_exercises: client.month2_exercises ? JSON.parse(client.month2_exercises) : [],
         month3_exercises: client.month3_exercises ? JSON.parse(client.month3_exercises) : []
       }))
+      console.log("Parsed Result:", parsedResult) // Debugging log
       setLookupResult(parsedResult)
     } catch (err) {
       setError((err as Error).message || "An unexpected error occurred.")
@@ -88,6 +98,40 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
     return date.toLocaleDateString()
   }
 
+  const renderExerciseData = (workouts: WorkoutData[]) => {
+    console.log("Rendering workouts:", workouts)
+    if (!Array.isArray(workouts)) {
+      console.error("Invalid data structure for workouts:", workouts)
+      return <p>Invalid data structure.</p>
+    }
+
+    if (workouts.length === 0) {
+      return <p>No exercises available for this month.</p>
+    }
+
+    return (
+      <>
+        {workouts.map((workout) => (
+          <div key={workout.Workout} className='mb-4'>
+            <h5>Workout {workout.Workout}</h5>
+            <ul>
+              {workout.Exercises.map((exercise, idx) => (
+                <li key={idx}>
+                  <strong>{exercise.Exercise} - </strong>Sets: {exercise.Sets}, Reps:{" "}
+                  {exercise.Reps ? exercise.Reps : "-"}, Hold: {exercise.Hold ? `${exercise.Hold}` : "-"}, Rest:{" "}
+                  {exercise.Rest}, Notes: {exercise.Notes}{" "}
+                  <a href={exercise.Link} target='_blank' rel='noopener noreferrer'>
+                    (Link)
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </>
+    )
+  }
+
   return (
     <Container>
       {!mode && (
@@ -95,13 +139,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
           <button onClick={() => setMode("new")} className='mx-2'>
             New Client
           </button>
-          <button color='secondary' onClick={() => setMode("lookup")} className='lookup-btn mx-2'>
+          <button onClick={() => setMode("lookup")} className='lookup-btn mx-2'>
             Lookup Existing
           </button>
         </div>
       )}
 
-      {/* New Client Form */}
       {mode === "new" && (
         <form className='client-form' onSubmit={handleSubmit}>
           <label className='form-label' htmlFor='name'>
@@ -144,15 +187,12 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
           <button className='submit-btn mx-auto mt-4 mb-4' type='submit'>
             Save
           </button>
-          <button
-            onClick={() => setMode(null)} // Reset mode to null
-            className='back-btn mx-auto mt-2 mb-4'
-          >
+          <button onClick={() => setMode(null)} className='back-btn mx-auto mt-2 mb-4'>
             Back
           </button>
         </form>
       )}
-      {/* Lookup Existing Form */}
+
       {mode === "lookup" && (
         <Container className='lookup-container'>
           <div className='lookup-form client-form'>
@@ -170,57 +210,29 @@ const ClientForm: React.FC<ClientFormProps> = ({ initialInfo, onSubmit }) => {
             <button onClick={handleLookup} className='submit-btn mx-auto mt-4 mb-4'>
               Lookup
             </button>
-            <button
-              onClick={() => setMode(null)} // Reset mode to null
-              className='back-btn mx-auto mt-2 mb-4'
-            >
+            <button onClick={() => setMode(null)} className='back-btn mx-auto mt-2 mb-4'>
               Back
             </button>
             {error && <p className='text-danger mt-3'>{error}</p>}
           </div>
-          {/* Displaying results in a table */}
+
           {lookupResult.length > 0 && (
             <Container>
-              <table className='table table-bordered mt-4'>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Workouts Per Week</th>
-                    <th>Month 1 Exercises</th>
-                    <th>Month 2 Exercises</th>
-                    <th>Month 3 Exercises</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lookupResult.map((client, index) => (
-                    <tr key={index}>
-                      <td>{formatDate(client.created_at)}</td>
-                      <td>{client.workoutsPerWeek}</td>
-                      <td>
-                        <ul>
-                          {client.month1_exercises.map((exercise, idx) => (
-                            <li key={idx}>{exercise}</li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td>
-                        <ul>
-                          {client.month2_exercises.map((exercise, idx) => (
-                            <li key={idx}>{exercise}</li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td>
-                        <ul>
-                          {client.month3_exercises.map((exercise, idx) => (
-                            <li key={idx}>{exercise}</li>
-                          ))}
-                        </ul>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {lookupResult.map((client, index) => (
+                <div key={index} className='client-data'>
+                  <h4>
+                    Client: {client.name} ({client.email})
+                  </h4>
+                  <p>Created At: {formatDate(client.created_at)}</p>
+                  <p>Workouts Per Week: {client.workoutsPerWeek}</p>
+                  <h5>Month 1 Exercises</h5>
+                  {renderExerciseData(client.month1_exercises)}
+                  <h5>Month 2 Exercises</h5>
+                  {renderExerciseData(client.month2_exercises)}
+                  <h5>Month 3 Exercises</h5>
+                  {renderExerciseData(client.month3_exercises)}
+                </div>
+              ))}
             </Container>
           )}
         </Container>
