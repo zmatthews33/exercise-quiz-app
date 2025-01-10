@@ -164,34 +164,38 @@ const Quiz: React.FC<QuizProps> = () => {
   }
 
   const getGluteusMediusStrengthExerciseNo = (lowestValue: number) => {
-    if (lowestValue >= 0 && lowestValue <= 15) return 1
-    if (lowestValue >= 16 && lowestValue <= 30) return 2
-    if (lowestValue > 30 && lowestValue <= 60) return 3
-    if (lowestValue > 60 && lowestValue <= 90) return 4
-    if (lowestValue > 90) return 5
+    if (lowestValue >= 0 && lowestValue <= 4) return 1
+    if (lowestValue >= 5 && lowestValue <= 9) return 2
+    if (lowestValue >= 10 && lowestValue <= 12) return 3
+    if (lowestValue >= 13 && lowestValue <= 17) return 4
+    if (lowestValue >= 18 && lowestValue <= 30) return 5
+    if (lowestValue > 30) return 6
     return null
   }
 
   const getHamstringStrengthExerciseNo = (reps: number) => {
-    if (reps >= 0 && reps < 5) return 1
-    if (reps >= 5 && reps < 10) return 2
-    if (reps >= 10 && reps < 15) return 3
-    if (reps >= 15) return 4
+    if (reps >= 0 && reps < 2) return 1
+    if (reps >= 3 && reps < 5) return 2
+    if (reps >= 6 && reps < 8) return 3
+    if (reps >= 9 && reps < 12) return 4
+    if (reps >= 13) return 5
     return null
   }
 
   const getGluteusMaximusStrengthExerciseNo = (reps: number) => {
-    if (reps >= 0 && reps < 10) return 1
-    if (reps >= 10 && reps < 20) return 2
-    if (reps >= 20 && reps < 30) return 3
-    if (reps >= 30) return 4
+    if (reps >= 0 && reps < 3) return 1
+    if (reps >= 4 && reps < 6) return 2
+    if (reps >= 7 && reps < 12) return 3
+    if (reps >= 13 && reps < 18) return 4
+    if (reps >= 19) return 5
     return null
   }
 
   const getBalanceExerciseNo = (secs: number) => {
     if (secs >= 0 && secs <= 5) return 1
-    if (secs > 5 && secs <= 9) return 2
-    if (secs > 9) return 3
+    if (secs > 5 && secs <= 7) return 2
+    if (secs > 7 && secs <= 10) return 3
+    if (secs > 10) return 4
     return null
   }
   const calculateResults = () => {
