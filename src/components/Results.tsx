@@ -237,7 +237,48 @@ const Results: React.FC<ResultsProps> = ({
           <Typography variant='h5'>Workout {week}</Typography>
         </AccordionSummary>
         <AccordionDetails>
+          <Typography variant='h5'>For TrueCoach</Typography>
           <TableContainer component={Paper}>
+            <Table style={{ tableLayout: "fixed" }}>
+              <TableHead>
+                <TableRow>
+                  {" "}
+                  <TableCell>
+                    <strong>For TrueCoach</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Link</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {exercises.map((exercise, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {exercise.Exercise}
+                      <p>
+                        {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
+                        {exercise.Hold && `${exercise.Sets} sets ${exercise.Hold}`}
+                        <br />
+                        <br />
+                        Rest {exercise.Rest}
+                        <br />
+                        <br />
+                        {exercise.Notes}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <a href={exercise.Link}>{exercise.Link}</a>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <br />
+            <Typography variant='h5' style={{ paddingLeft: "15px" }}>
+              Saved Workout Data
+            </Typography>
+
             <Table style={{ tableLayout: "fixed" }}>
               <TableHead>
                 <TableRow>
@@ -254,7 +295,7 @@ const Results: React.FC<ResultsProps> = ({
                     <strong>Reps</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Hold (secs)</strong>
+                    <strong>Hold</strong>
                   </TableCell>
                   <TableCell>
                     <strong>Rest (mins)</strong>
@@ -276,9 +317,21 @@ const Results: React.FC<ResultsProps> = ({
                     <TableCell>{exercise.Reps}</TableCell>
                     <TableCell>{exercise.Hold}</TableCell>
                     <TableCell>{exercise.Rest}</TableCell>
-                    <TableCell>{exercise.Notes}</TableCell>
+                    {/* <TableCell>{exercise.Notes}</TableCell> */}
                     <TableCell>
-                      <a href={exercise.Link}>Link</a>
+                      <p>
+                        {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
+                        {exercise.Hold && `${exercise.Sets} sets ${exercise.Hold}`}
+                        <br />
+                        <br />
+                        Rest {exercise.Rest}
+                        <br />
+                        <br />
+                        {exercise.Notes}
+                      </p>
+                    </TableCell>
+                    <TableCell>
+                      <a href={exercise.Link}>{exercise.Link}</a>
                     </TableCell>
                   </TableRow>
                 ))}
