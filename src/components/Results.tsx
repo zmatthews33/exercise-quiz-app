@@ -77,17 +77,8 @@ const Results: React.FC<ResultsProps> = ({
         categories.forEach((category) => {
           if (category in masterExerciseList) {
             const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
-            if (category === "Foot Strength") {
-              const footStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (footStrengthExercise) {
-                filteredExercises.push(footStrengthExercise)
-              }
-            } else if (category === "Knee Strength Isometrics") {
-              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (calfStrengthExercise) {
-                filteredExercises.push(calfStrengthExercise)
-              }
-            } else if (category === "Calf Strength") {
+
+            if (category === "Calf Strength") {
               const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
               if (calfStrengthExercise) {
                 filteredExercises.push(calfStrengthExercise)
