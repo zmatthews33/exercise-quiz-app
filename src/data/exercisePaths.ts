@@ -48,7 +48,7 @@ export const exercisePaths: ExercisePath[] = [
     CalfTestFail: true,
     WorkoutPerWeekNumber: 3,
     Workout1: "Calf Strength, Front Plank, Balance, Knee Strength, Gluteus Medius Strength",
-    Workout2: "Calf Strength, Ankle Mobility, Gluteus Medius, Gluteus Maximus Strength",
+    Workout2: "Calf Strength, Ankle Mobility, Gluteus Medius Strength, Gluteus Maximus Strength",
     Workout3: "Ankle Mobility, Hamstring Strength, Balance, Knee Strength, Gluteus Maximus Strength"
   },
   {
@@ -66,7 +66,7 @@ export const exercisePaths: ExercisePath[] = [
     CalfTestFail: true,
     WorkoutPerWeekNumber: 3,
     Workout1: "Calf Strength, Front Plank, Balance, Knee Strength, Gluteus Medius Strength",
-    Workout2: "Calf Strength, Balance, Gluteus Medius, Gluteus Maximus Strength",
+    Workout2: "Calf Strength, Balance, Gluteus Medius Strength, Gluteus Maximus Strength",
     Workout3: "Ankle Mobility, Hamstring Strength, Knee Strength, Gluteus Maximus Strength"
   },
   {
