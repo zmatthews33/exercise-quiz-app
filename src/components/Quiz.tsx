@@ -164,11 +164,12 @@ const Quiz: React.FC<QuizProps> = () => {
   }
 
   const getGluteusMediusStrengthExerciseNo = (lowestValue: number) => {
-    if (lowestValue >= 0 && lowestValue <= 15) return 1
-    if (lowestValue >= 16 && lowestValue <= 30) return 2
-    if (lowestValue > 30 && lowestValue <= 60) return 3
-    if (lowestValue > 60 && lowestValue <= 90) return 4
-    if (lowestValue > 90) return 5
+    if (lowestValue >= 0 && lowestValue <= 4) return 1
+    if (lowestValue >= 5 && lowestValue <= 9) return 2
+    if (lowestValue > 10 && lowestValue <= 12) return 3
+    if (lowestValue > 13 && lowestValue <= 17) return 4
+    if (lowestValue > 18 && lowestValue <= 30) return 5
+    if (lowestValue > 30) return 6
     return null
   }
 
