@@ -277,6 +277,7 @@ const Results: React.FC<ResultsProps> = ({
                   <TableRow key={index}>
                     <TableCell>
                       <h6>{exercise.Exercise}</h6>
+                      <p>{exercise.Category}</p>
                       <p>
                         {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
                         {exercise.Hold && `${exercise.Sets} sets ${exercise.Hold}`}
