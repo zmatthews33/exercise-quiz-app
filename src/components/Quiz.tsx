@@ -109,9 +109,10 @@ const Quiz: React.FC<QuizProps> = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<number[][]>(initializeAnswers(questions))
   const [showResults, setShowResults] = useState(false)
-  const [ankleTestFail, setAnkleTestFail] = useState(false)
+  // const [ankleTestFail, setAnkleTestFail] = useState(false)
   const [calfTestFail, setCalfTestFail] = useState(false)
   const [calfExerciseNo, setCalfExerciseNo] = useState<number | null>(null)
+  const [ankleExerciseNo, setAnkleExerciseNo] = useState<number | null>(null)
   const [kneeExerciseNo, setKneeExerciseNo] = useState<number | null>(null)
   const [gluteMedExerciseNo, setGluteMedExerciseNo] = useState<number | null>(null)
   const [hamstringExerciseNo, setHamstringExerciseNo] = useState<number | null>(null)
@@ -123,14 +124,13 @@ const Quiz: React.FC<QuizProps> = () => {
   const [quizComplete, setQuizComplete] = useState<boolean>(false)
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    const value = parseInt(e.target.value, 10) || 0 // Parse input value to number, default to 0 if NaN
+    const value = parseFloat(e.target.value) // Use parseFloat to support decimals
     const newAnswers = [...answers]
 
-    // Check if the value is not a number or is negative, reset to 0
-    if (isNaN(value) || value < 0) {
-      newAnswers[currentQuestion][index] = 0
+    if (!isNaN(value) && value >= 0) {
+      newAnswers[currentQuestion][index] = value // Assign the valid number
     } else {
-      newAnswers[currentQuestion][index] = value
+      newAnswers[currentQuestion][index] = 0 // Default to 0 for invalid input
     }
 
     setAnswers(newAnswers)
@@ -175,19 +175,19 @@ const Quiz: React.FC<QuizProps> = () => {
   }
 
   const getHamstringStrengthExerciseNo = (reps: number) => {
-    if (reps >= 0 && reps < 2) return 1
-    if (reps >= 3 && reps < 5) return 2
-    if (reps >= 6 && reps < 8) return 3
-    if (reps >= 9 && reps < 12) return 4
+    if (reps >= 0 && reps <= 2) return 1
+    if (reps >= 3 && reps <= 5) return 2
+    if (reps >= 6 && reps <= 8) return 3
+    if (reps >= 9 && reps <= 12) return 4
     if (reps >= 13) return 5
     return null
   }
 
   const getGluteusMaximusStrengthExerciseNo = (reps: number) => {
-    if (reps >= 0 && reps < 3) return 1
-    if (reps >= 4 && reps < 6) return 2
-    if (reps >= 7 && reps < 12) return 3
-    if (reps >= 13 && reps < 18) return 4
+    if (reps >= 0 && reps <= 3) return 1
+    if (reps >= 4 && reps <= 6) return 2
+    if (reps >= 7 && reps <= 12) return 3
+    if (reps >= 13 && reps <= 18) return 4
     if (reps >= 19) return 5
     return null
   }
@@ -199,29 +199,33 @@ const Quiz: React.FC<QuizProps> = () => {
     if (secs > 10) return 4
     return null
   }
+
   const getCalfExerciseNo = (reps: number) => {
     if (reps >= 0 && reps <= 2) return 1
     if (reps >= 3 && reps <= 5) return 2
-    if (reps >= 5 && reps <= 7) return 3
+    if (reps >= 6 && reps <= 7) return 3
     if (reps >= 8 && reps <= 10) return 4
     if (reps >= 11 && reps <= 13) return 5
     if (reps >= 14 && reps <= 16) return 6
     if (reps >= 17 && reps <= 19) return 7
+    if (reps > 19) return 8
     return null
   }
-  const calculateResults = () => {
-    // Check ankle mobility test
-    const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
-    if (ankleTestIndex !== -1) {
-      const [_, ankleRight, ankleLeft] = answers[ankleTestIndex]
-      setAnkleTestFail(ankleRight < 1 || ankleLeft < 1 ? true : false)
-      console.log("Did ankle test fail?", ankleRight < 1 || ankleLeft < 1 ? true : false)
-    }
 
+  const getAnkleExerciseNo = (inches: number) => {
+    if (inches >= 0 && inches <= 1) return 1
+    if (inches > 1 && inches <= 2) return 2
+    if (inches > 2 && inches <= 3) return 3
+    if (inches > 3 && inches <= 3.5) return 4
+    if (inches > 3.5 && inches <= 4) return 5
+    if (inches > 4) return 6
+    return null
+  }
+
+  const calculateResults = () => {
     const calfTestIndex = questions.findIndex((q) => q.exerciseGroup === "Calf Strength")
 
     if (calfTestIndex !== -1) {
-      // Extract the relevant answers for the calf test
       const [calfTogether, calfRight, calfLeft] = answers[calfTestIndex]
 
       // Determine if the calf test failed
@@ -237,23 +241,23 @@ const Quiz: React.FC<QuizProps> = () => {
         setCalfExerciseNo(calfExerciseNo)
         console.log("Calf Exercise Lowest Value", lowestCalfValue)
         console.log("Calf Exercise No:", calfExerciseNo)
-
-        // Function to determine exercise number based on balance reps
-
-        // Get the appropriate exercise number based on the lowest reps
-        // const exerciseNo = getCalfExerciseNo(lowestReps)
-        // console.log("Lowest Calf reps:", exerciseNo)
-        // console.log("Assigned Calf Exercise Number:", exerciseNo)
-        // setCalfExerciseNo(calfExerciseNo)
-        // Perform any further actions with the exercise number
-        // e.g., setExerciseNo(exerciseNo);
       }
     }
 
     // Calculate exercise numbers
+    const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
+    if (ankleTestIndex !== -1) {
+      const ankleAnswers = answers[ankleTestIndex].filter((val) => val !== null) // Filter invalid values
+      const lowestAnkleValue = Math.min(...ankleAnswers)
+      const ankleExerciseNo = getAnkleExerciseNo(lowestAnkleValue)
+      setAnkleExerciseNo(ankleExerciseNo)
+      console.log("Ankle Exercise Lowest Value", lowestAnkleValue)
+      console.log("Ankle Exercise No:", ankleExerciseNo)
+    }
+
     const kneeTestIndex = questions.findIndex((q) => q.exerciseGroup === "Knee Strength")
     if (kneeTestIndex !== -1) {
-      const kneeAnswers = answers[kneeTestIndex]
+      const kneeAnswers = answers[kneeTestIndex].filter((val) => val !== null)
       const lowestKneeValue = Math.min(...kneeAnswers)
       const kneeExerciseNo = getKneeStrengthExerciseNo(lowestKneeValue)
       setKneeExerciseNo(kneeExerciseNo)
@@ -303,6 +307,7 @@ const Quiz: React.FC<QuizProps> = () => {
 
     // Update exercise numbers based on masterExerciseList
     const exerciseMappings: { [key: string]: number | null } = {
+      "Ankle Mobility": ankleExerciseNo,
       "Knee Strength": kneeExerciseNo,
       "Gluteus Medius Strength": gluteMedExerciseNo,
       "Hamstring Strength": hamstringExerciseNo,
@@ -314,11 +319,13 @@ const Quiz: React.FC<QuizProps> = () => {
       if (exerciseMappings[group] !== null) {
         const exerciseNo = exerciseMappings[group]
         const exercises = masterExerciseList[group as keyof typeof masterExerciseList]
-
         // Find the exercise details based on ExerciseNo
         const exerciseDetails = exercises.find((ex) => ex.ExerciseNo === exerciseNo)
 
         switch (group) {
+          case "Ankle Mobility":
+            setAnkleExerciseNo(exerciseNo)
+            break
           case "Knee Strength":
             setKneeExerciseNo(exerciseNo)
             break
@@ -420,9 +427,10 @@ const Quiz: React.FC<QuizProps> = () => {
             <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
           </div>
           <Results
-            ankleTestFail={ankleTestFail}
+            // ankleTestFail={ankleTestFail}
             calfTestFail={calfTestFail}
             clientInfo={clientInfo}
+            ankleExerciseNo={ankleExerciseNo}
             calfExerciseNo={calfExerciseNo}
             kneeExerciseNo={kneeExerciseNo}
             gluteMedExerciseNo={gluteMedExerciseNo}

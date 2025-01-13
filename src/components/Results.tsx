@@ -24,9 +24,10 @@ import { masterExerciseList } from "../data/exerciseList"
 import exercisePaths from "../data/exercisePaths"
 
 interface ResultsProps {
-  ankleTestFail: boolean
+  // ankleTestFail: boolean
   calfTestFail: boolean
   clientInfo: ClientInfo
+  ankleExerciseNo: number | null
   calfExerciseNo: number | null
   kneeExerciseNo: number | null
   gluteMedExerciseNo: number | null
@@ -36,9 +37,10 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({
-  ankleTestFail,
+  // ankleTestFail,
   calfTestFail,
   clientInfo,
+  ankleExerciseNo,
   calfExerciseNo,
   kneeExerciseNo,
   gluteMedExerciseNo,
@@ -49,10 +51,7 @@ const Results: React.FC<ResultsProps> = ({
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
-    (p) =>
-      p.AnkleTestFail === ankleTestFail &&
-      p.CalfTestFail === calfTestFail &&
-      p.WorkoutPerWeekNumber === workoutPerWeekNumber
+    (p) => p.CalfTestFail === calfTestFail && p.WorkoutPerWeekNumber === workoutPerWeekNumber
   )
 
   const [month1Exercises, setMonth1Exercises] = useState<Exercise[][]>([])
@@ -81,16 +80,9 @@ const Results: React.FC<ResultsProps> = ({
             const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
 
             if (category === "Calf Strength") {
-              console.log("1Calf Strength Exercises:", exercises)
-              console.log("1calfExerciseNo:", calfExerciseNo)
               const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === calfExerciseNo)
               if (calfStrengthExercise) {
                 filteredExercises.push(calfStrengthExercise)
-              }
-            } else if (category === "Ankle Mobility") {
-              const ankleMobilityExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (ankleMobilityExercise) {
-                filteredExercises.push(ankleMobilityExercise)
               }
             } else if (category === "Front Planks") {
               const frontPlankExercise = exercises.find((ex) => ex.ExerciseNo === 1)
@@ -114,8 +106,8 @@ const Results: React.FC<ResultsProps> = ({
       }
 
       const exerciseNumbers = {
+        "Ankle Mobility": ankleExerciseNo,
         "Calf Strength": calfTestFail === true ? calfExerciseNo : null,
-        "Ankle Mobility": ankleTestFail === true ? 1 : null,
         "Knee Strength": kneeExerciseNo,
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
@@ -192,14 +184,16 @@ const Results: React.FC<ResultsProps> = ({
     }
   }, [
     path,
+    ankleExerciseNo,
     calfExerciseNo,
     kneeExerciseNo,
     gluteMedExerciseNo,
     hamstringExerciseNo,
     gluteMaxExerciseNo,
     balanceExerciseNo,
-    calfTestFail,
-    ankleTestFail
+    calfTestFail
+    // ,
+    // ankleTestFail
   ])
 
   if (!path) {
@@ -218,10 +212,10 @@ const Results: React.FC<ResultsProps> = ({
             <p>Path: {path.Path}</p>
           </strong>
           <strong>
-            <p>
+            {/* <p>
               Ankle Test:
               <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
-            </p>
+            </p> */}
           </strong>
           <strong>
             <p>
