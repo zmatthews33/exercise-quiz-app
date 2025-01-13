@@ -201,7 +201,7 @@ const Results: React.FC<ResultsProps> = ({
     <div className='mb-4'>
       <Accordion className='accordion'>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant='h5'>Expand Results</Typography>
+          <Typography variant='h5'>Test Results</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <strong>
@@ -247,17 +247,17 @@ const Results: React.FC<ResultsProps> = ({
           <Typography variant='h5'>Workout {week}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant='h5'>For TrueCoach</Typography>
+          <Typography variant='h5'>TrueCoach Input</Typography>
           <TableContainer component={Paper}>
             <Table style={{ tableLayout: "fixed" }}>
               <TableHead>
                 <TableRow>
                   {" "}
                   <TableCell>
-                    <strong>For TrueCoach</strong>
+                    <strong>Exercises/Details</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Link</strong>
+                    <strong>Links</strong>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -266,7 +266,8 @@ const Results: React.FC<ResultsProps> = ({
                   <TableRow key={index}>
                     <TableCell>
                       <h6>{exercise.Exercise}</h6>
-                      <p>{exercise.Category}</p>
+                      {/* // for debugging */}
+                      {/* <p>{exercise.Category}</p> */}
                       <p>
                         {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
                         {exercise.Hold && `${exercise.Sets} sets ${exercise.Hold}`}
@@ -337,7 +338,6 @@ const Results: React.FC<ResultsProps> = ({
                           <TableCell>{exercise.Reps}</TableCell>
                           <TableCell>{exercise.Hold}</TableCell>
                           <TableCell>{exercise.Rest}</TableCell>
-                          {/* <TableCell>{exercise.Notes}</TableCell> */}
                           <TableCell>
                             <p>
                               {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
@@ -369,9 +369,7 @@ const Results: React.FC<ResultsProps> = ({
   return (
     <Container>
       <h2>Workout Program</h2>
-
-      {renderExercisesScores(exerciseScores)}
-
+      <hr />
       <h3>Month 1</h3>
       {month1Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
       <h3>Month 2</h3>
@@ -384,6 +382,9 @@ const Results: React.FC<ResultsProps> = ({
       {month5Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
       <h3>Month 6</h3>
       {month6Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
+
+      <hr />
+      {renderExercisesScores(exerciseScores)}
     </Container>
   )
 }

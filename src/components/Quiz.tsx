@@ -109,7 +109,6 @@ const Quiz: React.FC<QuizProps> = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<number[][]>(initializeAnswers(questions))
   const [showResults, setShowResults] = useState(false)
-  // const [ankleTestFail, setAnkleTestFail] = useState(false)
   const [calfTestFail, setCalfTestFail] = useState(false)
   const [calfExerciseNo, setCalfExerciseNo] = useState<number | null>(null)
   const [ankleExerciseNo, setAnkleExerciseNo] = useState<number | null>(null)
@@ -231,7 +230,7 @@ const Quiz: React.FC<QuizProps> = () => {
       // Determine if the calf test failed
       const didFail = calfTogether < 20 || calfRight < 20 || calfLeft < 20
       setCalfTestFail(didFail)
-      console.log("Did calf test fail?", didFail)
+      // console.log("Did calf test fail?", didFail)
 
       // Additional logic if the calf test failed
       if (didFail) {
@@ -239,8 +238,8 @@ const Quiz: React.FC<QuizProps> = () => {
         const lowestCalfValue = Math.min(...calfAnswers)
         const calfExerciseNo = getCalfExerciseNo(lowestCalfValue)
         setCalfExerciseNo(calfExerciseNo)
-        console.log("Calf Exercise Lowest Value", lowestCalfValue)
-        console.log("Calf Exercise No:", calfExerciseNo)
+        // console.log("Calf Exercise Lowest Value", lowestCalfValue)
+        // console.log("Calf Exercise No:", calfExerciseNo)
       }
     }
 
@@ -251,8 +250,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestAnkleValue = Math.min(...ankleAnswers)
       const ankleExerciseNo = getAnkleExerciseNo(lowestAnkleValue)
       setAnkleExerciseNo(ankleExerciseNo)
-      console.log("Ankle Exercise Lowest Value", lowestAnkleValue)
-      console.log("Ankle Exercise No:", ankleExerciseNo)
+      // console.log("Ankle Exercise Lowest Value", lowestAnkleValue)
+      // console.log("Ankle Exercise No:", ankleExerciseNo)
     }
 
     const kneeTestIndex = questions.findIndex((q) => q.exerciseGroup === "Knee Strength")
@@ -261,8 +260,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestKneeValue = Math.min(...kneeAnswers)
       const kneeExerciseNo = getKneeStrengthExerciseNo(lowestKneeValue)
       setKneeExerciseNo(kneeExerciseNo)
-      console.log("Knee Exercise Lowest Value", lowestKneeValue)
-      console.log("Knee Exercise No:", kneeExerciseNo)
+      // console.log("Knee Exercise Lowest Value", lowestKneeValue)
+      // console.log("Knee Exercise No:", kneeExerciseNo)
     }
 
     const gluteMedTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Medius Strength")
@@ -271,8 +270,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestGluteMedValue = Math.min(...gluteMedAnswers)
       const gluteMedExerciseNo = getGluteusMediusStrengthExerciseNo(lowestGluteMedValue)
       setGluteMedExerciseNo(gluteMedExerciseNo)
-      console.log("Gluteus Medius Strength Lowest Value", lowestGluteMedValue)
-      console.log("Gluteus Medius Exercise No:", gluteMedExerciseNo)
+      // console.log("Gluteus Medius Strength Lowest Value", lowestGluteMedValue)
+      // console.log("Gluteus Medius Exercise No:", gluteMedExerciseNo)
     }
 
     const hamstringTestIndex = questions.findIndex((q) => q.exerciseGroup === "Hamstring Strength")
@@ -281,8 +280,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestHamstringValue = Math.min(...hamstringAnswers)
       const hamstringExerciseNo = getHamstringStrengthExerciseNo(lowestHamstringValue)
       setHamstringExerciseNo(hamstringExerciseNo)
-      console.log("Hamstring Strength Lowest Value", lowestHamstringValue)
-      console.log("Hamstring Exercise No:", hamstringExerciseNo)
+      // console.log("Hamstring Strength Lowest Value", lowestHamstringValue)
+      // console.log("Hamstring Exercise No:", hamstringExerciseNo)
     }
 
     const gluteMaxTestIndex = questions.findIndex((q) => q.exerciseGroup === "Gluteus Maximus Strength")
@@ -291,8 +290,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestGluteMaxValue = Math.min(...gluteMaxAnswers)
       const gluteMaxExerciseNo = getGluteusMaximusStrengthExerciseNo(lowestGluteMaxValue)
       setGluteMaxExerciseNo(gluteMaxExerciseNo)
-      console.log("Gluteus Maximus Strength Lowest Value", lowestGluteMaxValue)
-      console.log("Gluteus Maximus Exercise No:", gluteMaxExerciseNo)
+      // console.log("Gluteus Maximus Strength Lowest Value", lowestGluteMaxValue)
+      // console.log("Gluteus Maximus Exercise No:", gluteMaxExerciseNo)
     }
 
     const balanceTestIndex = questions.findIndex((q) => q.exerciseGroup === "Balance")
@@ -301,8 +300,8 @@ const Quiz: React.FC<QuizProps> = () => {
       const lowestBalanceValue = Math.min(...balanceAnswers)
       const balanceExerciseNo = getBalanceExerciseNo(lowestBalanceValue)
       setBalanceExerciseNo(balanceExerciseNo)
-      console.log("Balance Test Lowest Value", lowestBalanceValue)
-      console.log("Balance Exercise No:", balanceExerciseNo)
+      // console.log("Balance Test Lowest Value", lowestBalanceValue)
+      // console.log("Balance Exercise No:", balanceExerciseNo)
     }
 
     // Update exercise numbers based on masterExerciseList
@@ -427,7 +426,6 @@ const Quiz: React.FC<QuizProps> = () => {
             <p>Workouts per Week: {clientInfo.workoutsPerWeek}</p>
           </div>
           <Results
-            // ankleTestFail={ankleTestFail}
             calfTestFail={calfTestFail}
             clientInfo={clientInfo}
             ankleExerciseNo={ankleExerciseNo}
