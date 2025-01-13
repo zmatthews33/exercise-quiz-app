@@ -12,10 +12,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CssBaseline />
     <App
-      ankleTestFail={false}
       calfTestFail={false}
       // @ts-expect-error
       clientInfo={null}
+      ankleExerciseNo={0}
+      calfExerciseNo={0}
       kneeExerciseNo={0}
       gluteMedExerciseNo={0}
       hamstringExerciseNo={0}

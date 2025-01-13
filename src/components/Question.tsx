@@ -38,6 +38,8 @@ const Question: React.FC<QuestionProps> = ({
           {bothSidesTogetherMessage && <h4>{bothSidesTogetherMessage}</h4>}
           {/* <FormLabel>Together:</FormLabel> */}
           <TextField
+            type='number'
+            InputProps={{ inputProps: { step: "0.1" } }}
             className='form-control question-input'
             label='Together'
             value={answer[0] !== null ? answer[0] : ""}
@@ -55,6 +57,8 @@ const Question: React.FC<QuestionProps> = ({
                   <div className='mb-2'>
                     {/* <FormLabel>Right:</FormLabel> */}
                     <TextField
+                      type='number'
+                      InputProps={{ inputProps: { step: "0.1" } }}
                       className='form-control'
                       label='Right'
                       required
@@ -65,6 +69,8 @@ const Question: React.FC<QuestionProps> = ({
                   <div className='mb-2'>
                     {/* <FormLabel>Left:</FormLabel> */}
                     <TextField
+                      type='number'
+                      InputProps={{ inputProps: { step: "0.1" } }}
                       className='form-control'
                       label='Left'
                       required
@@ -80,6 +86,8 @@ const Question: React.FC<QuestionProps> = ({
               <div className='mb-2'>
                 {eachSideMessage && <h4>{eachSideMessage}</h4>}
                 <TextField
+                  type='number'
+                  InputProps={{ inputProps: { step: "0.1" } }}
                   className='form-control question-input'
                   required
                   label='Right'
@@ -89,6 +97,8 @@ const Question: React.FC<QuestionProps> = ({
               </div>
               <div className='mb-2'>
                 <TextField
+                  type='number'
+                  InputProps={{ inputProps: { step: "0.1" } }}
                   className='form-control'
                   label='Left'
                   required
@@ -102,6 +112,8 @@ const Question: React.FC<QuestionProps> = ({
       )}
       {!eachSide && !bothSidesTogether && (
         <TextField
+          type='number'
+          InputProps={{ inputProps: { step: "0.1" } }}
           className='mb-2 form-control'
           required
           value={answer[0] !== null ? answer[0] : ""}

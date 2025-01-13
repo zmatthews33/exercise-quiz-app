@@ -24,9 +24,10 @@ import { masterExerciseList } from "../data/exerciseList"
 import exercisePaths from "../data/exercisePaths"
 
 interface ResultsProps {
-  ankleTestFail: boolean
   calfTestFail: boolean
   clientInfo: ClientInfo
+  ankleExerciseNo: number | null
+  calfExerciseNo: number | null
   kneeExerciseNo: number | null
   gluteMedExerciseNo: number | null
   hamstringExerciseNo: number | null
@@ -35,9 +36,10 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({
-  ankleTestFail,
   calfTestFail,
   clientInfo,
+  ankleExerciseNo,
+  calfExerciseNo,
   kneeExerciseNo,
   gluteMedExerciseNo,
   hamstringExerciseNo,
@@ -47,10 +49,7 @@ const Results: React.FC<ResultsProps> = ({
   const workoutPerWeekNumber = clientInfo.workoutsPerWeek
 
   const path = exercisePaths.find(
-    (p) =>
-      p.AnkleTestFail === ankleTestFail &&
-      p.CalfTestFail === calfTestFail &&
-      p.WorkoutPerWeekNumber === workoutPerWeekNumber
+    (p) => p.CalfTestFail === calfTestFail && p.WorkoutPerWeekNumber === workoutPerWeekNumber
   )
 
   const [month1Exercises, setMonth1Exercises] = useState<Exercise[][]>([])
@@ -79,14 +78,9 @@ const Results: React.FC<ResultsProps> = ({
             const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
 
             if (category === "Calf Strength") {
-              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === calfExerciseNo)
               if (calfStrengthExercise) {
                 filteredExercises.push(calfStrengthExercise)
-              }
-            } else if (category === "Ankle Mobility") {
-              const ankleMobilityExercise = exercises.find((ex) => ex.ExerciseNo === 1)
-              if (ankleMobilityExercise) {
-                filteredExercises.push(ankleMobilityExercise)
               }
             } else if (category === "Front Planks") {
               const frontPlankExercise = exercises.find((ex) => ex.ExerciseNo === 1)
@@ -110,8 +104,8 @@ const Results: React.FC<ResultsProps> = ({
       }
 
       const exerciseNumbers = {
-        "Calf Strength": calfTestFail === true ? 1 : null,
-        "Ankle Mobility": ankleTestFail === true ? 1 : null,
+        "Ankle Mobility": ankleExerciseNo,
+        "Calf Strength": calfTestFail === true ? calfExerciseNo : null,
         "Knee Strength": kneeExerciseNo,
         "Gluteus Medius Strength": gluteMedExerciseNo,
         "Hamstring Strength": hamstringExerciseNo,
@@ -188,13 +182,14 @@ const Results: React.FC<ResultsProps> = ({
     }
   }, [
     path,
+    ankleExerciseNo,
+    calfExerciseNo,
     kneeExerciseNo,
     gluteMedExerciseNo,
     hamstringExerciseNo,
     gluteMaxExerciseNo,
     balanceExerciseNo,
-    calfTestFail,
-    ankleTestFail
+    calfTestFail
   ])
 
   if (!path) {
@@ -206,17 +201,11 @@ const Results: React.FC<ResultsProps> = ({
     <div className='mb-4'>
       <Accordion className='accordion'>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography variant='h5'>Expand Results</Typography>
+          <Typography variant='h5'>Test Results</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <strong>
             <p>Path: {path.Path}</p>
-          </strong>
-          <strong>
-            <p>
-              Ankle Test:
-              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
-            </p>
           </strong>
           <strong>
             <p>
@@ -258,17 +247,17 @@ const Results: React.FC<ResultsProps> = ({
           <Typography variant='h5'>Workout {week}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography variant='h5'>For TrueCoach</Typography>
+          <Typography variant='h5'>TrueCoach Input</Typography>
           <TableContainer component={Paper}>
             <Table style={{ tableLayout: "fixed" }}>
               <TableHead>
                 <TableRow>
                   {" "}
                   <TableCell>
-                    <strong>For TrueCoach</strong>
+                    <strong>Exercises/Details</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Link</strong>
+                    <strong>Links</strong>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -277,7 +266,8 @@ const Results: React.FC<ResultsProps> = ({
                   <TableRow key={index}>
                     <TableCell>
                       <h6>{exercise.Exercise}</h6>
-                      <p>{exercise.Category}</p>
+                      {/* // for debugging */}
+                      {/* <p>{exercise.Category}</p> */}
                       <p>
                         {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
                         {exercise.Hold && `${exercise.Sets} sets ${exercise.Hold}`}
@@ -348,7 +338,6 @@ const Results: React.FC<ResultsProps> = ({
                           <TableCell>{exercise.Reps}</TableCell>
                           <TableCell>{exercise.Hold}</TableCell>
                           <TableCell>{exercise.Rest}</TableCell>
-                          {/* <TableCell>{exercise.Notes}</TableCell> */}
                           <TableCell>
                             <p>
                               {exercise.Reps && `${exercise.Sets} sets of ${exercise.Reps}`}
@@ -380,9 +369,7 @@ const Results: React.FC<ResultsProps> = ({
   return (
     <Container>
       <h2>Workout Program</h2>
-
-      {renderExercisesScores(exerciseScores)}
-
+      <hr />
       <h3>Month 1</h3>
       {month1Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
       <h3>Month 2</h3>
@@ -395,6 +382,9 @@ const Results: React.FC<ResultsProps> = ({
       {month5Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
       <h3>Month 6</h3>
       {month6Exercises.map((exercises, week) => renderExercisesTable(exercises, week + 1))}
+
+      <hr />
+      {renderExercisesScores(exerciseScores)}
     </Container>
   )
 }

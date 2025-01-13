@@ -9,9 +9,10 @@ import { ClientInfo } from "./components/ClientForm"
 import { Container, Row } from "react-bootstrap"
 
 type Props = {
-  ankleTestFail: boolean
   calfTestFail: boolean
   clientInfo: ClientInfo
+  ankleExerciseNo: number
+  calfExerciseNo: number
   kneeExerciseNo: number
   gluteMedExerciseNo: number
   hamstringExerciseNo: number
@@ -20,9 +21,10 @@ type Props = {
 }
 
 const App: React.FC<Props> = ({
-  ankleTestFail,
   calfTestFail,
   clientInfo,
+  ankleExerciseNo,
+  calfExerciseNo,
   kneeExerciseNo,
   gluteMedExerciseNo,
   hamstringExerciseNo,
@@ -64,8 +66,9 @@ const App: React.FC<Props> = ({
       </header>
       {quizComplete ? (
         <Results
-          ankleTestFail={ankleTestFail}
+          ankleExerciseNo={ankleExerciseNo}
           calfTestFail={calfTestFail}
+          calfExerciseNo={calfExerciseNo}
           clientInfo={clientInfo}
           kneeExerciseNo={kneeExerciseNo}
           gluteMedExerciseNo={gluteMedExerciseNo}
