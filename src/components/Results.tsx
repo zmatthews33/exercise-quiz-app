@@ -24,7 +24,6 @@ import { masterExerciseList } from "../data/exerciseList"
 import exercisePaths from "../data/exercisePaths"
 
 interface ResultsProps {
-  // ankleTestFail: boolean
   calfTestFail: boolean
   clientInfo: ClientInfo
   ankleExerciseNo: number | null
@@ -37,7 +36,6 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({
-  // ankleTestFail,
   calfTestFail,
   clientInfo,
   ankleExerciseNo,
@@ -192,8 +190,6 @@ const Results: React.FC<ResultsProps> = ({
     gluteMaxExerciseNo,
     balanceExerciseNo,
     calfTestFail
-    // ,
-    // ankleTestFail
   ])
 
   if (!path) {
@@ -210,12 +206,6 @@ const Results: React.FC<ResultsProps> = ({
         <AccordionDetails>
           <strong>
             <p>Path: {path.Path}</p>
-          </strong>
-          <strong>
-            {/* <p>
-              Ankle Test:
-              <span className={ankleTestFail ? "fail-color" : "pass-color"}> {ankleTestFail ? "FAIL" : "PASS"}</span>
-            </p> */}
           </strong>
           <strong>
             <p>
