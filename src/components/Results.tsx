@@ -27,6 +27,7 @@ interface ResultsProps {
   ankleTestFail: boolean
   calfTestFail: boolean
   clientInfo: ClientInfo
+  calfExerciseNo: number | null
   kneeExerciseNo: number | null
   gluteMedExerciseNo: number | null
   hamstringExerciseNo: number | null
@@ -38,6 +39,7 @@ const Results: React.FC<ResultsProps> = ({
   ankleTestFail,
   calfTestFail,
   clientInfo,
+  calfExerciseNo,
   kneeExerciseNo,
   gluteMedExerciseNo,
   hamstringExerciseNo,
@@ -79,7 +81,9 @@ const Results: React.FC<ResultsProps> = ({
             const exercises = masterExerciseList[category as keyof typeof masterExerciseList]
 
             if (category === "Calf Strength") {
-              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === 1)
+              console.log("1Calf Strength Exercises:", exercises)
+              console.log("1calfExerciseNo:", calfExerciseNo)
+              const calfStrengthExercise = exercises.find((ex) => ex.ExerciseNo === calfExerciseNo)
               if (calfStrengthExercise) {
                 filteredExercises.push(calfStrengthExercise)
               }
@@ -110,7 +114,7 @@ const Results: React.FC<ResultsProps> = ({
       }
 
       const exerciseNumbers = {
-        "Calf Strength": calfTestFail === true ? 1 : null,
+        "Calf Strength": calfTestFail === true ? calfExerciseNo : null,
         "Ankle Mobility": ankleTestFail === true ? 1 : null,
         "Knee Strength": kneeExerciseNo,
         "Gluteus Medius Strength": gluteMedExerciseNo,
@@ -188,6 +192,7 @@ const Results: React.FC<ResultsProps> = ({
     }
   }, [
     path,
+    calfExerciseNo,
     kneeExerciseNo,
     gluteMedExerciseNo,
     hamstringExerciseNo,

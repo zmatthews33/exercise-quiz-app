@@ -111,6 +111,7 @@ const Quiz: React.FC<QuizProps> = () => {
   const [showResults, setShowResults] = useState(false)
   const [ankleTestFail, setAnkleTestFail] = useState(false)
   const [calfTestFail, setCalfTestFail] = useState(false)
+  const [calfExerciseNo, setCalfExerciseNo] = useState<number | null>(null)
   const [kneeExerciseNo, setKneeExerciseNo] = useState<number | null>(null)
   const [gluteMedExerciseNo, setGluteMedExerciseNo] = useState<number | null>(null)
   const [hamstringExerciseNo, setHamstringExerciseNo] = useState<number | null>(null)
@@ -198,6 +199,16 @@ const Quiz: React.FC<QuizProps> = () => {
     if (secs > 10) return 4
     return null
   }
+  const getCalfExerciseNo = (reps: number) => {
+    if (reps >= 0 && reps <= 2) return 1
+    if (reps >= 3 && reps <= 5) return 2
+    if (reps >= 5 && reps <= 7) return 3
+    if (reps >= 8 && reps <= 10) return 4
+    if (reps >= 11 && reps <= 13) return 5
+    if (reps >= 14 && reps <= 16) return 6
+    if (reps >= 17 && reps <= 19) return 7
+    return null
+  }
   const calculateResults = () => {
     // Check ankle mobility test
     const ankleTestIndex = questions.findIndex((q) => q.exerciseGroup === "Ankle Mobility")
@@ -208,10 +219,35 @@ const Quiz: React.FC<QuizProps> = () => {
     }
 
     const calfTestIndex = questions.findIndex((q) => q.exerciseGroup === "Calf Strength")
+
     if (calfTestIndex !== -1) {
+      // Extract the relevant answers for the calf test
       const [calfTogether, calfRight, calfLeft] = answers[calfTestIndex]
-      setCalfTestFail(calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? true : false)
-      console.log("Did calf test fail?", calfTogether < 20 || calfRight < 20 || calfLeft < 20 ? true : false)
+
+      // Determine if the calf test failed
+      const didFail = calfTogether < 20 || calfRight < 20 || calfLeft < 20
+      setCalfTestFail(didFail)
+      console.log("Did calf test fail?", didFail)
+
+      // Additional logic if the calf test failed
+      if (didFail) {
+        const calfAnswers = answers[calfTestIndex]
+        const lowestCalfValue = Math.min(...calfAnswers)
+        const calfExerciseNo = getCalfExerciseNo(lowestCalfValue)
+        setCalfExerciseNo(calfExerciseNo)
+        console.log("Calf Exercise Lowest Value", lowestCalfValue)
+        console.log("Calf Exercise No:", calfExerciseNo)
+
+        // Function to determine exercise number based on balance reps
+
+        // Get the appropriate exercise number based on the lowest reps
+        // const exerciseNo = getCalfExerciseNo(lowestReps)
+        // console.log("Lowest Calf reps:", exerciseNo)
+        // console.log("Assigned Calf Exercise Number:", exerciseNo)
+        // setCalfExerciseNo(calfExerciseNo)
+        // Perform any further actions with the exercise number
+        // e.g., setExerciseNo(exerciseNo);
+      }
     }
 
     // Calculate exercise numbers
@@ -387,6 +423,7 @@ const Quiz: React.FC<QuizProps> = () => {
             ankleTestFail={ankleTestFail}
             calfTestFail={calfTestFail}
             clientInfo={clientInfo}
+            calfExerciseNo={calfExerciseNo}
             kneeExerciseNo={kneeExerciseNo}
             gluteMedExerciseNo={gluteMedExerciseNo}
             gluteMaxExerciseNo={gluteMaxExerciseNo}
