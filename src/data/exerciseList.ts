@@ -98,7 +98,7 @@ export const masterExerciseList: ExerciseCategory = {
       Rest: "Alternate sides, rest break optional",
       Link: "",
       Notes:
-        "Start with a 4-6 inches step (no need to go higher than this).  You can stack books in substitute of the box, just make sure the books are big enough to fit your whole foot (don't want your toes hanging off).",
+        "Start with a 4-6 inch step (no need to go higher than this).  You can stack books in substitute of the box, just make sure the books are big enough to fit your whole foot (don't want your toes hanging off).",
       isAddOn: "No",
       Category: "Ankle Mobility"
     },
@@ -112,7 +112,7 @@ export const masterExerciseList: ExerciseCategory = {
       Rest: "Alternate sides, rest break optional",
       Link: "",
       Notes:
-        "Use 5-6 inches step (no need to go higher than this).  You can stack books in substitute of the box, just make sure the books are big enough to fit your whole foot (don't want your toes hanging off).",
+        "Use 5-6 inch step (no need to go higher than this).  You can stack books in substitute of the box, just make sure the books are big enough to fit your whole foot (don't want your toes hanging off).",
       isAddOn: "No",
       Category: "Ankle Mobility"
     }
@@ -168,8 +168,9 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "10",
       Hold: "",
       Rest: "Alternate sides and rest 60-90 seconds between rounds",
-      Link: "needs video",
-      Notes: "Use the amount of weight needed to where 5 reps requires 80% of your max effort to complete. ",
+      Link: "https://youtube.com/shorts/ioFfV7VWdrw?feature=share",
+      Notes:
+        "Use a 4-6 inch platform or step.Use the amount of weight needed to where 5 reps requires 80% of your max effort to complete.",
       isAddOn: "No",
       Category: "Knee Strength"
     },
@@ -181,8 +182,9 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "15",
       Hold: "",
       Rest: "Alternate sides and rest 60-90 seconds between rounds",
-      Link: "needs video",
-      Notes: "Use the amount of weight needed to where 5 reps requires 80% of your max effort to complete. ",
+      Link: "https://youtube.com/shorts/ioFfV7VWdrw?feature=share",
+      Notes:
+        "Use a 6-8 inch platform or step.Use the amount of weight needed to where 5 reps requires 80% of your max effort to complete.",
       isAddOn: "No",
       Category: "Knee Strength"
     },
@@ -333,7 +335,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "5",
       Hold: "",
       Rest: "Alternate sides and rest 2 minutes between each round",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/dEZZ_wWf3lM?feature=share",
       Notes: "Focus on the quality of your form over the size of the movement.  ",
       isAddOn: "No",
       Category: "Gluteus Medius Strength"
@@ -341,12 +343,12 @@ export const masterExerciseList: ExerciseCategory = {
     {
       Month: 7,
       ExerciseNo: 7,
-      Exercise: "Resisted Hip Airplane (holding cans or DB in opposite hand)",
+      Exercise: "Hip Airplane",
       Sets: "3",
-      Reps: "5",
+      Reps: "10",
       Hold: "",
       Rest: "Alternate sides and rest 90 seconds between each round",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/dEZZ_wWf3lM?feature=share",
       Notes: "The weight will add some additional challenge for you this month! ",
       isAddOn: "No",
       Category: "Gluteus Medius Strength"
@@ -359,40 +361,40 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "10",
       Hold: "",
       Rest: "Alternate sides and rest 90 seconds between each round",
-      Link: "Needs video",
-      Notes: "Focus on a smooth, controlled landing.  1 rep = moving to right and left side.",
+      Link: "https://youtube.com/shorts/ZU95FaQi6GQ?feature=share",
+      Notes: "Phase 1 as shown in the video",
       isAddOn: "No",
       Category: "Gluteus Medius Strength"
     },
     {
       Month: 9,
       ExerciseNo: 9,
-      Exercise: "Skater Taps",
+      Exercise: "Skater Hops",
       Sets: "3",
       Reps: "10",
       Hold: "",
       Rest: "Alternate sides and rest 90 seconds between each round",
-      Link: "Needs video",
-      Notes: "Focus on a smooth, controlled landing.  1 rep = moving to right and left side.",
+      Link: "https://youtube.com/shorts/ZU95FaQi6GQ?feature=share",
+      Notes: "Phase 2 as shown in the video",
       isAddOn: "No",
       Category: "Gluteus Medius Strength"
     },
     {
       Month: 10,
       ExerciseNo: 10,
-      Exercise: "Skater Taps",
+      Exercise: "Skater Jumps",
       Sets: "3",
       Reps: "10",
       Hold: "",
       Rest: "Alternate sides and rest 90 seconds between each round",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/CFoOfhMXMmw?feature=share",
       Notes: "Focus on a smooth, controlled landing.  1 rep = moving to right and left side.",
       isAddOn: "No",
       Category: "Gluteus Medius Strength"
     },
     {
       Month: 11,
-      ExerciseNo: 12,
+      ExerciseNo: 11,
       Exercise: "Side Plank (feet on bench leg lifted)",
       Sets: "3",
       Reps: "",
@@ -454,7 +456,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "AMRAP (as many reps as possible)",
       Hold: "",
       Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/8zTWz0Ycb30?feature=share",
       Notes: "Complete as many repetitions as you can on each side with good form. ",
       isAddOn: "No",
       Category: "Gluteus Maximus Strength"
@@ -466,7 +468,7 @@ export const masterExerciseList: ExerciseCategory = {
       Sets: "3",
       Reps: "5",
       Hold: "",
-      Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
+      Rest: "Use a 6-8 inch step",
       Link: "https://youtube.com/shorts/kJrCHoN1YEY?feature=share",
       Notes:
         "If you're able to watch yourself in the mirror (or set your phone camera on selfie mode) to ensure your knee doesn't dive inward while completing, do so.",
@@ -493,7 +495,7 @@ export const masterExerciseList: ExerciseCategory = {
       Sets: "3",
       Reps: "5",
       Hold: "",
-      Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
+      Rest: "Use a 10-12 inch step",
       Link: "https://youtube.com/shorts/3cveP_4V8tA?feature=share",
       Notes: "Choose a weight than makes 5 repetitions challenging. ",
       isAddOn: "No",
@@ -507,7 +509,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "5",
       Hold: "",
       Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/zucsxEebKms?feature=share",
       Notes: "Choose a weight than makes 5 repetitions challenging. ",
       isAddOn: "No",
       Category: "Gluteus Maximus Strength"
@@ -520,7 +522,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "5",
       Hold: "",
       Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/gUzZwND1uH4?feature=share",
       Notes: "Choose a weight than makes 5 repetitions challenging. ",
       isAddOn: "No",
       Category: "Gluteus Maximus Strength"
@@ -533,7 +535,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "5",
       Hold: "",
       Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/zWj8uWoZL6E?feature=share",
       Notes: "Choose a weight than makes 5 repetitions challenging. ",
       isAddOn: "No",
       Category: "Gluteus Maximus Strength"
@@ -545,8 +547,8 @@ export const masterExerciseList: ExerciseCategory = {
       Sets: "3",
       Reps: "5",
       Hold: "",
-      Rest: "Complete all reps on one side, then switch, then rest 2 minutes before beginning the next round.",
-      Link: "https://youtube.com/shorts/kJrCHoN1YEY?feature=share",
+      Rest: "Use a 10-12 inch step",
+      Link: "https://youtube.com/shorts/ioFfV7VWdrw?feature=share",
       Notes:
         "Complete as many repetitions as you can on each side with good form. If you're able to watch yourself in the mirror (or set your phone camera on selfie mode) to ensure your knee doesn't dive inward while completing, do so.",
       isAddOn: "No",
@@ -562,7 +564,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "10",
       Hold: "",
       Rest: "Rest 90 seconds between rounds",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/3JIIzYqKegY?feature=share",
       Notes: "Hold the high knee position 2-3 seconds before transitioning to the other side.",
       isAddOn: "No",
       Category: "Balance"
@@ -570,12 +572,12 @@ export const masterExerciseList: ExerciseCategory = {
     {
       Month: 2,
       ExerciseNo: 2,
-      Exercise: "3-Way Marching",
+      Exercise: "4-Way Marching",
       Sets: "3",
       Reps: "10",
       Hold: "",
       Rest: "Rest 90 seconds between rounds",
-      Link: "https://youtube.com/shorts/FsiLPPYzp5U?feature=share",
+      Link: "https://youtube.com/shorts/ExwS3WrB_CA?feature=share",
       Notes: "Hold the high knee position 2-3 seconds before transitioning to the other side.",
       isAddOn: "No",
       Category: "Balance"
@@ -616,7 +618,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "",
       Hold: "45 seconds",
       Rest: "Alternate sides, rest break optional",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/7XcktaRUkv8?feature=share",
       Notes: "Focus on maintaining stability through the tripod of your foot (see video for more info).",
       isAddOn: "No",
       Category: "Balance"
@@ -629,7 +631,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "enough reps to reach 80% fatigue",
       Hold: "",
       Rest: "Rest 90 seconds between rounds",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/4c4h2Wk3B-g?feature=share",
       Notes: "Focus on maintaining stability through the tripod of your foot (see video for more info).",
       isAddOn: "No",
       Category: "Balance"
@@ -637,12 +639,12 @@ export const masterExerciseList: ExerciseCategory = {
     {
       Month: 7,
       ExerciseNo: 7,
-      Exercise: "Asymmetrics Farmer's March",
+      Exercise: "Asymmetrics Farmers March",
       Sets: "3",
       Reps: "10",
       Hold: "",
       Rest: "Rest 90 seconds between rounds",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/xbpHFtMWU9I?feature=share",
       Notes: "Hold the high knee position 2-3 seconds before transitioning to the other side.",
       isAddOn: "No",
       Category: "Balance"
@@ -669,7 +671,7 @@ export const masterExerciseList: ExerciseCategory = {
       Reps: "enough reps to reach 70% fatigue",
       Hold: "holding for for 45 seconds",
       Rest: "Rest 90 seconds between rounds",
-      Link: "Needs video",
+      Link: "https://youtube.com/shorts/zmZNI13TCRs?feature=share",
       Notes: "Focus on maintaining stablity through the tripod of your foot (see video for more info)",
       isAddOn: "No",
       Category: "Balance"
@@ -864,7 +866,7 @@ export const masterExerciseList: ExerciseCategory = {
       Hold: "",
       Rest: "Do one side, then the other, then rest 2 full minutes before beginning the next round",
       Link: "https://youtube.com/shorts/vwUR3nCmIN8?feature=share",
-      Notes: "UPDATE: Single leg version.  Record reps for each set below and I'll review these when we check-in.",
+      Notes: "Single leg version.  Record reps for each set below and I'll review these when we check-in.",
       isAddOn: "No",
       Category: "Calf Strength"
     },
