@@ -60,10 +60,7 @@ const App: React.FC<Props> = ({
   }
 
   return (
-    <Container className='App'>
-      <header className='App-header text-center pb-4'>
-        <h1>Screening Form</h1>
-      </header>
+    <Container className='App mt-5'>
       {quizComplete ? (
         <Results
           ankleExerciseNo={ankleExerciseNo}

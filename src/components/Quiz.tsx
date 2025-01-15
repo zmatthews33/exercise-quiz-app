@@ -367,6 +367,9 @@ const Quiz: React.FC<QuizProps> = () => {
 
   return (
     <Container>
+      <header className='App-header text-center pb-4'>
+        <h1>{!showResults ? "Screening Form" : "Screening Results"}</h1>
+      </header>
       {!clientInfo || editMode ? (
         // <Container>
         <>
