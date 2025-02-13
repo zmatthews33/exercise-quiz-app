@@ -742,8 +742,7 @@ export const masterExerciseList: ExerciseCategory = {
       Hold: "",
       Rest: "Rest 2 minutes between rounds.",
       Link: "https://youtu.be/T1DirDOfDk4",
-      Notes:
-        "Work on lowering as slowly as possible each rep. Complete one side, then the other, then rest 2 minutes between rounds.",
+      Notes: "Work on lowering as slowly as possible each rep.",
       isAddOn: "No",
       Category: "Hamstring Strength"
     },
